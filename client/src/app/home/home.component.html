@@ -1,0 +1,27 @@
+<div class="demo">
+  <md-card class="demo-card demo-basic">
+    <md-toolbar color="primary">My Tickets</md-toolbar>
+    <md-card-content>
+        <md-nav-list>
+          <a md-list-item *ngFor="let ticket of myTickets" href="ticket?Id={{ ticket.Id }}">
+            <md-icon md-list-icon>folder</md-icon>
+            <span md-line>{{ ticket.subject }}</span>
+            <span md-line class="demo-secondary-text"> {{ ticket.message }} </span>
+          </a>
+        </md-nav-list>
+    </md-card-content>
+  </md-card>
+
+  <md-card class="demo-card demo-basic">
+    <md-toolbar color="primary">Assigned Tickets</md-toolbar>
+    <md-card-content>
+      <md-nav-list>
+        <a md-list-item *ngFor="let ticket of assignedTickets" href="ticket?Id={{ ticket.Id }}">
+          <md-icon md-list-icon>folder</md-icon>
+          <span md-line>{{ ticket.subject }}</span>
+          <span md-line class="demo-secondary-text"> {{ ticket.message }} </span>
+        </a>
+      </md-nav-list>
+    </md-card-content>
+  </md-card>
+</div>

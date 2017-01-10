@@ -1,0 +1,20 @@
+<md-card class="demo-1card demo-1basic">
+  <md-toolbar color="primary">Status</md-toolbar>
+  <md-card-content>
+    <form>
+      <md-list>
+      <a md-list-item *ngFor="let status of statuses">
+        <md-icon md-list-icon>poll</md-icon>
+        <span md-line>{{status.name}}</span>
+      </a>
+      </md-list>
+      <!--<ul>
+        <li *ngFor="let person of persons">
+          <strong>{{person.name}}</strong><br>
+    from: {{person.city}}<br>
+    date of birth: {{person.dob | date: 'dd/MM/yyyy'}}
+        </li>
+      </ul>-->
+    </form>
+  </md-card-content>
+</md-card>

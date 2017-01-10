@@ -1,0 +1,58 @@
+
+.demo {
+  display: flex;
+  flex-flow: row wrap;
+
+  md-list, md-nav-list {
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    width: 350px;
+    margin: 0 0 0 0;
+
+  }
+  h2 {
+    margin-top: 20px;
+  }
+
+  md-icon {
+    color: rgba(0, 0, 0, 0.12);
+  }
+
+  [md-list-icon] {
+    color: white;
+    background: rgba(0, 0, 0, 0.3);
+  }
+}
+
+.demo-secondary-text {
+  color: rgba(0, 0, 0, 0.54);
+}
+
+
+.demo-basic {
+  padding: 0;
+}
+.demo-basic md-card-content {
+  padding: 16px;
+}
+.demo-full-width {
+  width: 100%;
+}
+
+.demo-icons {
+  font-size: 100%;
+  height: inherit;
+  vertical-align: top;
+  width: inherit;
+}
+
+.demo-card {
+  margin: 16px;
+}
+
+.demo-textarea {
+  resize: none;
+  border: none;
+  overflow: auto;
+  padding: 0;
+  background: lightblue;
+}
