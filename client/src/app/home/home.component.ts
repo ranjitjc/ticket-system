@@ -1,13 +1,20 @@
 import { Component, OnInit } from '@angular/core';
+import { CurrentUser } from '../services/auth.service';
+
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  styleUrls: ['./home.component.scss'],
+  providers : []
+  
 })
 export class HomeComponent implements OnInit {
 
   constructor() { }
+
+  private currentUser : CurrentUser = JSON.parse( localStorage.getItem('currentUser'));
+
 
   myTickets: any[] = [
     {
@@ -58,8 +65,14 @@ export class HomeComponent implements OnInit {
     }
   ];
 
+  isLogedInSession : boolean = false;
 
   ngOnInit() {
+     if (!localStorage.getItem('access_token')) {
+            this.isLogedInSession=false;
+        }else{
+          this.isLogedInSession = true;
+        }
   }
 
 }

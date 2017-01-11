@@ -7,6 +7,7 @@ import { MaterialModule } from '@angular/material';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app.routing.module'
 
+import { AuthGuard} from './security/auth.guard';
 import { HomeComponent } from './home/home.component';
 import { AboutComponent } from './about/about.component';
 import { MaterialComponent } from './material/material.component';
@@ -36,7 +37,7 @@ import { SearchComponent } from './search/search.component';
     MaterialModule.forRoot(),
     AppRoutingModule
   ],
-  providers: [],
+  providers: [AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
