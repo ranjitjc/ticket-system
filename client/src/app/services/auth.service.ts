@@ -1,11 +1,17 @@
 import { Injectable } from '@angular/core';
 import {Http, Headers, RequestOptions, Response, HttpModule} from '@angular/http';
-import { Observable } from 'rxjs/Rx';
+import { Observable, BehaviorSubject } from 'rxjs/Rx';
 import 'rxjs/add/operator/toPromise';
 
 @Injectable()
 export class AuthenticationService {
-    constructor(private _http: Http) { }
+    constructor(private _http: Http) { 
+        this._loggedInUser = <BehaviorSubject<CurrentUser>> new BehaviorSubject({});
+        this.LoggedInUser = this._loggedInUser.asObservable();
+    }
+
+    LoggedInUser : Observable<CurrentUser>;
+     _loggedInUser : BehaviorSubject<CurrentUser>
 
     loginWin(event, username, password) {
         event.preventDefault();
@@ -30,25 +36,47 @@ export class AuthenticationService {
         );
     }    
 
-    login(username: string, password: string): Promise<CurrentUser> {
+    //login(username: string, password: string): Promise<CurrentUser> {
+    login(): Observable<CurrentUser> {
 
-        let url = "http://localhost:5000/api/security/authenticate";
+        let url = "http://localhost:5000/api/security";
+        /*
         let body = "username=" + username + "&password=" + password + "&grant_type=password";
         body = JSON.stringify({ username: username, password: password });
         let headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
         let options = new RequestOptions({ headers: headers });       
+        return this._http.post(url, body, options) 
+        */
+        return this._http.get(url) 
+            //.toPromise()
+            .map(response => this.extractArray(response))
+            .catch(this.handleError);
+    }    
 
+    loginFormAuth(username: string, password: string): Promise<CurrentUser> {
+
+        let url = "http://localhost:5000/api/security";
+        
+        let body = "username=" + username + "&password=" + password + "&grant_type=password";
+        body = JSON.stringify({ username: username, password: password });
+        let headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
+        let options = new RequestOptions({ headers: headers });       
         return this._http.post(url, body, options) 
             .toPromise()
             .then(response => this.extractArray(response))
             .catch(this.handleErrorPromise);
-    }    
+    } 
 
     protected extractArray(res: Response, showprogress: boolean = true) {
         let user = res.json() || {};
         // login successful if there's a jwt token in the response
-        let token = user && user.token;
+        let token = user && user.accessToken;
         if (token) {
+
+            // console.log( this._loggedInUser.observers.forEach(
+            //      a => a.next(user))
+            //      );
+            this._loggedInUser.next( user );
             // store username and jwt token in local storage to keep user logged in between page refreshes
             localStorage.setItem('currentUser', JSON.stringify({ user }));
 
@@ -61,6 +89,26 @@ export class AuthenticationService {
         return user;
     }
 
+
+    protected handleError(error: any) {
+        try {
+            error = JSON.parse(error._body);
+        } catch (e) {
+        }
+
+        let errMsg = error.errorMessage
+            ? error.errorMessage
+            : error.message
+                ? error.message
+                : error._body
+                    ? error._body
+                    : error.status
+                        ? `${error.status} - ${error.statusText}`
+                        : 'unknown server error';
+
+        console.error(errMsg);
+        return Observable.throw(errMsg);
+    }
     protected handleErrorPromise(error: any): Promise<void> {
         try {
             error = JSON.parse(error._body);
@@ -94,6 +142,4 @@ export interface CurrentUser {
     accessToken:string;
     expiresIn: Date;
     tokenType :string;
-    message:string
-
 }
