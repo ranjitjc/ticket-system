@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { CurrentUser } from '../services/auth.service';
+import { CurrentUser, AuthenticationService } from '../services/auth.service';
+import { Observable, BehaviorSubject } from 'rxjs/Rx';
 
+declare var _:any;
 
 @Component({
   selector: 'app-home',
@@ -11,7 +13,15 @@ import { CurrentUser } from '../services/auth.service';
 })
 export class HomeComponent implements OnInit {
 
-  constructor() { }
+  constructor(private _authService: AuthenticationService) { 
+    this.LoggedInStateSub =new BehaviorSubject(0);
+    //this.LoggedInStateSub.startWith(0);
+    this.LoggedInErrorStateSub =new BehaviorSubject(0);
+    //this.LoggedInErrorStateSub.startWith(0);
+
+    this.LoggedInState = this.LoggedInStateSub.asObservable();
+    this.LoggedInErrorState = this.LoggedInErrorStateSub.asObservable();
+  }
 
   private currentUser : CurrentUser = JSON.parse( localStorage.getItem('currentUser'));
 
@@ -65,14 +75,38 @@ export class HomeComponent implements OnInit {
     }
   ];
 
-  isLogedInSession : boolean = false;
+  LoggedInStateSub : BehaviorSubject<Number>;
+  LoggedInErrorStateSub : BehaviorSubject<Number>;
+
+  LoggedInState : Observable<Number>;
+  LoggedInErrorState : Observable<Number>;
 
   ngOnInit() {
-     if (!localStorage.getItem('access_token')) {
-            this.isLogedInSession=false;
-        }else{
-          this.isLogedInSession = true;
-        }
+    if (!_.isEmpty(this.currentUser)){
+        this.LoggedInStateSub.next(1);
+        this.LoggedInErrorStateSub.next(0);
+    }else{
+      this._authService.LoggedInUser.subscribe( 
+        (currentUser) => {
+          console.log('HomeComponent:ngOnInit.Next :' + JSON.stringify(currentUser) );
+          if (!_.isEmpty(currentUser)) {
+
+            this.LoggedInStateSub.next(1);
+            this.LoggedInErrorStateSub.next(0);
+              
+          }else{
+              this.LoggedInStateSub.next(0);
+              this.LoggedInErrorStateSub.next(1);
+          }
+          //TODO: Unsubscribe
+          //this._authService.LoggedInUser.
+        },
+        (err) => 
+          console.log('HomeComponent:ngOnInit.Error :' + err),
+        () => 
+          console.log('HomeComponent:ngOnInit.Completed') 
+      );
+    }
   }
 
 }
