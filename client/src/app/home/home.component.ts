@@ -86,26 +86,30 @@ export class HomeComponent implements OnInit {
         this.LoggedInStateSub.next(1);
         this.LoggedInErrorStateSub.next(0);
     }else{
-      this._authService.LoggedInUser.subscribe( 
-        (currentUser) => {
-          console.log('HomeComponent:ngOnInit.Next :' + JSON.stringify(currentUser) );
-          if (!_.isEmpty(currentUser)) {
 
-            this.LoggedInStateSub.next(1);
-            this.LoggedInErrorStateSub.next(0);
-              
-          }else{
-              this.LoggedInStateSub.next(0);
-              this.LoggedInErrorStateSub.next(1);
-          }
-          //TODO: Unsubscribe
-          //this._authService.LoggedInUser.
-        },
-        (err) => 
-          console.log('HomeComponent:ngOnInit.Error :' + err),
-        () => 
-          console.log('HomeComponent:ngOnInit.Completed') 
-      );
+      let subscription = 
+        this._authService.LoggedInUser.subscribe( 
+          (currentUser) => {
+            console.log('HomeComponent:ngOnInit.Next :' + JSON.stringify(currentUser) );
+            if (!_.isEmpty(currentUser)) {
+
+              this.LoggedInStateSub.next(1);
+              this.LoggedInErrorStateSub.next(0);
+                
+            }else{
+                this.LoggedInStateSub.next(0);
+                this.LoggedInErrorStateSub.next(1);
+            }
+            if (subscription) {
+              console.log('HomeComponent:ngOnInit.unsubscribe.'),
+              subscription.unsubscribe();
+            }
+          },
+          (err) => 
+            console.log('HomeComponent:ngOnInit.Error :' + err),
+          () => 
+            console.log('HomeComponent:ngOnInit.Completed') 
+        );
     }
   }
 
