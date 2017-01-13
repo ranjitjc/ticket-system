@@ -47,9 +47,11 @@
     <!--<button md-button *ngIf="loggedIn()" [routerLink]="['/profile']">Profile</button>
     <button md-button *ngIf="!loggedIn()" (click)="login()">Sign in</button>
     <button md-button *ngIf="loggedIn()" (click)="logout()">Sign out</button>-->
-
     <span md-icon [class.m2app-dark]="isDarkTheme">
-    <md-icon>notifications</md-icon>
+      <span md-line>{{ fullName | async}}</span>
+    </span>
+    <span md-icon [class.m2app-dark]="isDarkTheme">
+      <md-icon>notifications</md-icon>
     </span>
     <button md-mini-fab (click)="isDarkTheme = !isDarkTheme">
       <md-icon class="md-12">settings_applications</md-icon>
