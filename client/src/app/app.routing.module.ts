@@ -35,19 +35,20 @@ const routes: Routes = [
 })
 export class AppRoutingModule implements OnInit { 
 
-  constructor(private _authService: AuthenticationService){
+  // constructor(private _authService: AuthenticationService){
 
-   this._authService.LoggedInUser.subscribe( 
-      (currentUser) => 
-        console.log('AppRoutingModule:ctor.Next :' + JSON.stringify(currentUser) ),
-      (err) => 
-        console.log('AppRoutingModule:ctor.Error :' + err),
-      () => 
-        console.log('AppRoutingModule:ctor.Completed') 
-    );
+  //  this._authService.LoggedInUser.subscribe( 
+  //     (currentUser) => 
+  //       console.log('AppRoutingModule:ctor.Next :' + JSON.stringify(currentUser) ),
+  //     (err) => 
+  //       console.log('AppRoutingModule:ctor.Error :' + err),
+  //     () => 
+  //       console.log('AppRoutingModule:ctor.Completed') 
+  //   );
   
 
-  }
+  // }
+
   ngOnInit(){
   
   }
