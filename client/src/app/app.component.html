@@ -20,7 +20,7 @@
       
       <a *ngFor="let navItem of navItems"
          md-list-item
-         (click)="sidenav.toggle()"
+         
          [routerLink]="[navItem.route]">
         <md-icon md-list-icon>{{navItem.icon}}</md-icon>
         <span md-line>{{navItem.name}}</span>
@@ -29,6 +29,7 @@
       </a>
     </md-nav-list>
   </md-sidenav>
+<!--(click)="sidenav.toggle()"-->
 
   <md-toolbar color="primary">
     <button class="app-icon-button" (click)="sidenav.toggle()">
@@ -43,7 +44,13 @@
 
     <span class="app-toolbar-filler"></span>
 
-    <button md-button [routerLink]="['/material']">Material Demo</button>
+    <form> 
+        <div class="search">
+        <md-input-container>
+          <input md-input placeholder="Search"  maxlength="6">
+        </md-input-container>
+        </div>
+    </form>
     <!--<button md-button *ngIf="loggedIn()" [routerLink]="['/profile']">Profile</button>
     <button md-button *ngIf="!loggedIn()" (click)="login()">Sign in</button>
     <button md-button *ngIf="loggedIn()" (click)="logout()">Sign out</button>-->
