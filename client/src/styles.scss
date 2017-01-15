@@ -42,7 +42,7 @@ body {
     padding: 8px;
   }
 
-.card-full-width {
+.control-full-width {
   width: 100%;
 }
 
@@ -61,4 +61,14 @@ md-card-actions {
     margin-left: 0; 
     margin-right: 0; 
     padding: 8px;
+}
+
+md-progress-spinner{
+    margin: 0 auto;
+    height: 40px;
+    width: 40px;
+}
+
+.error md-icon svg {
+  fill: red;
 }
