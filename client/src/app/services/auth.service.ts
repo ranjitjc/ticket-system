@@ -3,6 +3,9 @@ import {Http, Headers, RequestOptions, Response, HttpModule} from '@angular/http
 import { Observable, BehaviorSubject } from 'rxjs/Rx';
 import 'rxjs/add/operator/toPromise';
 
+import { environment } from '../../environments/environment';
+
+
 @Injectable()
 export class AuthenticationService {
     constructor(private _http: Http) { 
@@ -15,8 +18,9 @@ export class AuthenticationService {
 
     loginWin(event, username, password) {
         event.preventDefault();
-         
-        let url = "http://localhost:5000/api/login";
+
+        let url =  environment.apiURL + "login";
+
         let body = "username=" + username + "&password=" + password + "&grant_type=password";
         let headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
         let options = new RequestOptions({ headers: headers });        
@@ -39,7 +43,7 @@ export class AuthenticationService {
     //login(username: string, password: string): Promise<CurrentUser> {
     login(): Observable<CurrentUser> {
 
-        let url = "http://localhost:5000/api/security";
+        let url =  environment.apiURL + "security";
         /*
         let body = "username=" + username + "&password=" + password + "&grant_type=password";
         body = JSON.stringify({ username: username, password: password });
@@ -55,7 +59,7 @@ export class AuthenticationService {
 
     loginFormAuth(username: string, password: string): Promise<CurrentUser> {
 
-        let url = "http://localhost:5000/api/security";
+        let url =  environment.apiURL + "/security";
         
         let body = "username=" + username + "&password=" + password + "&grant_type=password";
         body = JSON.stringify({ username: username, password: password });
