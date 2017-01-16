@@ -1,20 +1,29 @@
-<md-card class="demo-1card demo-1basic">
-  <md-toolbar color="primary">Status</md-toolbar>
-  <md-card-content>
-    <form>
-      <md-list>
-      <a md-list-item *ngFor="let status of statuses">
-        <md-icon md-list-icon>poll</md-icon>
-        <span md-line>{{status.name}}</span>
-      </a>
-      </md-list>
-      <!--<ul>
-        <li *ngFor="let person of persons">
-          <strong>{{person.name}}</strong><br>
-    from: {{person.city}}<br>
-    date of birth: {{person.dob | date: 'dd/MM/yyyy'}}
-        </li>
-      </ul>-->
-    </form>
-  </md-card-content>
-</md-card>
+
+  <md-card class="app-card card-basic status-card">
+    <md-toolbar color="primary">Status</md-toolbar>
+    <md-card-content>
+        <!--<md-grid-list cols="1" *ngIf="isDisplay">
+            <md-grid-tile>-->
+                <div *ngIf="isLoading">
+                <span align="left"><md-progress-spinner  mode="indeterminate" ></md-progress-spinner> Loading...</span>
+                </div>
+                <md-card class="error-card" *ngIf="isError">
+                  <md-card-content>
+                    <md-icon class="error-icon">report_problem</md-icon>
+                    <span class="error-msg">{{ErrorMessage }}</span>
+                  </md-card-content>
+                </md-card>
+            <!--</md-grid-tile>
+        </md-grid-list>-->
+        <md-nav-list>
+          <a md-list-item *ngFor="let status of statuses"
+            [routerLink]="['/status', status.id]">
+            <md-icon md-list-icon>poll</md-icon>
+            <span md-line>{{status.name}}</span>
+          </a>
+        </md-nav-list>
+    </md-card-content>
+    <md-card-footer>
+      <md-progress-bar mode="indeterminate" *ngIf="isLoading"></md-progress-bar>
+    </md-card-footer>
+  </md-card>

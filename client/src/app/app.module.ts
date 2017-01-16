@@ -7,14 +7,16 @@ import { MaterialModule } from '@angular/material';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app.routing.module'
 
+import { ConfirmDialog } from './shared/confirm.dialog'
+
 import { AuthGuard} from './security/auth.guard';
 import { AuthenticationService } from './services/auth.service';
 
 import { HomeComponent } from './home/home.component';
 import { AboutComponent } from './about/about.component';
 import { MaterialComponent } from './material/material.component';
-import { LoginComponent } from './login/login.component';
-import { StatusComponent } from './status/status.component';
+//import { LoginComponent } from './login/login.component';
+import { StatusModule  } from './status/status.module';
 import { CategoryComponent } from './category/category.component';
 import { TicketComponent } from './ticket/ticket.component';
 import { SearchComponent } from './search/search.component';
@@ -25,19 +27,21 @@ import { SearchComponent } from './search/search.component';
     HomeComponent, 
     AboutComponent, 
     MaterialComponent, 
-    LoginComponent, 
-    StatusComponent, 
+    //LoginComponent, 
+    //StatusComponent, 
+    ConfirmDialog,
     CategoryComponent, 
     TicketComponent, 
     SearchComponent
   ],
- // entryComponents: [DialogContent],
+  entryComponents: [ConfirmDialog],
   imports: [
     BrowserModule,
     FormsModule,
     HttpModule,
     MaterialModule.forRoot(),
-    AppRoutingModule
+    AppRoutingModule,
+    StatusModule
   ],
   providers: [AuthGuard, AuthenticationService],
   bootstrap: [ AppComponent ]

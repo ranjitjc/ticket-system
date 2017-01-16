@@ -20,7 +20,7 @@
       
       <a *ngFor="let navItem of navItems"
          md-list-item
-         (click)="sidenav.toggle()"
+         
          [routerLink]="[navItem.route]">
         <md-icon md-list-icon>{{navItem.icon}}</md-icon>
         <span md-line>{{navItem.name}}</span>
@@ -29,6 +29,7 @@
       </a>
     </md-nav-list>
   </md-sidenav>
+<!--(click)="sidenav.toggle()"-->
 
   <md-toolbar color="primary">
     <button class="app-icon-button" (click)="sidenav.toggle()">
@@ -43,20 +44,46 @@
 
     <span class="app-toolbar-filler"></span>
 
-    <button md-button [routerLink]="['/material']">Material Demo</button>
+    <form> 
+        <div class="search">
+        <md-input-container>
+          <input md-input placeholder="Search"  maxlength="6">
+        </md-input-container>
+        </div>
+    </form>
     <!--<button md-button *ngIf="loggedIn()" [routerLink]="['/profile']">Profile</button>
     <button md-button *ngIf="!loggedIn()" (click)="login()">Sign in</button>
     <button md-button *ngIf="loggedIn()" (click)="logout()">Sign out</button>-->
     <span md-icon [class.m2app-dark]="isDarkTheme">
       <span md-line>{{ fullName | async}}</span>
     </span>
-    <span md-icon [class.m2app-dark]="isDarkTheme">
+    <!--<span md-icon [class.m2app-dark]="isDarkTheme">
       <md-icon>notifications</md-icon>
-    </span>
-    <button md-mini-fab (click)="isDarkTheme = !isDarkTheme">
+    </span>-->
+    <!--<button md-mini-fab (click)="isDarkTheme = !isDarkTheme">
       <md-icon class="md-12">settings_applications</md-icon>
       <!--<i class="material-icons">settings_applications</i>-->
+      <!--</button>-->
+
+       <button md-icon-button [class.m2app-dark]="isDarkTheme">
+         <md-icon class="md-12">notifications</md-icon>
       </button>
+      <button md-icon-button [md-menu-trigger-for]="menu">
+         <md-icon class="md-12">settings_applications</md-icon>
+      </button>
+
+    <md-menu #menu="mdMenu">
+      <button md-menu-item (click)="isDarkTheme = !isDarkTheme">
+        <md-icon>dashboard</md-icon>
+        <span>Dark Theme</span>
+        </button>
+       <button md-menu-item>
+        <md-icon>dialpad</md-icon>
+        <span>Settings</span>
+      </button>
+    </md-menu>
+
+
   </md-toolbar>
 
   <div class="app-content">

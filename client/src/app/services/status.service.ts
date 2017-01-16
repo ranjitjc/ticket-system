@@ -3,23 +3,39 @@ import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 import 'rxjs/add/operator/toPromise';
 
+import { environment } from '../../environments/environment';
+
 @Injectable()
 export class StatusService {
-    constructor(private _http: Http) { }
+    constructor(private _http: Http) {
+        this.baseUrl = environment.apiURL + 'ticketstatus';
+     }
 
-    loadData(): Promise<TicketStatus[]> {
-        return this._http.get('http://localhost:5000/api/statuses')
-            .toPromise()
-            .then(response => this.extractArray(response))
-            .catch(this.handleErrorPromise);
+    baseUrl:string;
+
+    GetAll(): Observable<TicketStatus[]> {
+        return this._http.get(this.baseUrl).delay(3000)
+            .map(response => this.extractArray(response))
+            .catch(this.handleError);
     }    
 
+    GetById(id: Number): Observable<TicketStatus> {
+
+        const url = `${this.baseUrl}/${id}`;
+        console.log('url' + url);
+        return this._http.get(url).delay(2000)
+            .map(response => this.extractArray(response))
+            .catch(this.handleError);
+    }  
+
     protected extractArray(res: Response, showprogress: boolean = true) {
+        //throw "Server Error: Internal Server Error";
         let data = res.json();
+        console.table(res);
         return data || [];
     }
 
-    protected handleErrorPromise(error: any): Promise<void> {
+    protected handleError(error: any) {
         try {
             error = JSON.parse(error._body);
         } catch (e) {
@@ -36,7 +52,7 @@ export class StatusService {
                         : 'unknown server error';
 
         console.error(errMsg);
-        return Promise.reject(errMsg);
+        return Observable.throw(errMsg);
     }
 }
 export interface TicketStatus {
