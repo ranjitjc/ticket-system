@@ -7,6 +7,8 @@ import { MaterialModule } from '@angular/material';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app.routing.module'
 
+import { ConfirmDialog } from './shared/confirm.dialog'
+
 import { AuthGuard} from './security/auth.guard';
 import { AuthenticationService } from './services/auth.service';
 
@@ -27,11 +29,12 @@ import { SearchComponent } from './search/search.component';
     MaterialComponent, 
     //LoginComponent, 
     //StatusComponent, 
+    ConfirmDialog,
     CategoryComponent, 
     TicketComponent, 
     SearchComponent
   ],
- // entryComponents: [DialogContent],
+  entryComponents: [ConfirmDialog],
   imports: [
     BrowserModule,
     FormsModule,
