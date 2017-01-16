@@ -1,13 +1,30 @@
 import { Component, OnInit } from '@angular/core';
+import { CurrentUser, AuthenticationService } from '../services/auth.service';
+import { Observable, BehaviorSubject } from 'rxjs/Rx';
+
+declare var _:any;
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  styleUrls: ['./home.component.scss'],
+  providers : []
+  
 })
 export class HomeComponent implements OnInit {
 
-  constructor() { }
+  constructor(private _authService: AuthenticationService) { 
+    this.LoggedInStateSub =new BehaviorSubject(0);
+    //this.LoggedInStateSub.startWith(0);
+    this.LoggedInErrorStateSub =new BehaviorSubject(0);
+    //this.LoggedInErrorStateSub.startWith(0);
+
+    this.LoggedInState = this.LoggedInStateSub.asObservable();
+    this.LoggedInErrorState = this.LoggedInErrorStateSub.asObservable();
+  }
+
+  private currentUser : CurrentUser = JSON.parse( localStorage.getItem('currentUser'));
+
 
   myTickets: any[] = [
     {
@@ -58,8 +75,42 @@ export class HomeComponent implements OnInit {
     }
   ];
 
+  LoggedInStateSub : BehaviorSubject<Number>;
+  LoggedInErrorStateSub : BehaviorSubject<Number>;
+
+  LoggedInState : Observable<Number>;
+  LoggedInErrorState : Observable<Number>;
 
   ngOnInit() {
+    if (!_.isEmpty(this.currentUser)){
+        this.LoggedInStateSub.next(1);
+        this.LoggedInErrorStateSub.next(0);
+    }else{
+
+      let subscription = 
+        this._authService.LoggedInUser.subscribe( 
+          (currentUser) => {
+            console.log('HomeComponent:ngOnInit.Next :' + JSON.stringify(currentUser) );
+            if (!_.isEmpty(currentUser)) {
+
+              this.LoggedInStateSub.next(1);
+              this.LoggedInErrorStateSub.next(0);
+                
+            }else{
+                this.LoggedInStateSub.next(0);
+                this.LoggedInErrorStateSub.next(1);
+            }
+            if (subscription) {
+              console.log('HomeComponent:ngOnInit.unsubscribe.'),
+              subscription.unsubscribe();
+            }
+          },
+          (err) => 
+            console.log('HomeComponent:ngOnInit.Error :' + err),
+          () => 
+            console.log('HomeComponent:ngOnInit.Completed') 
+        );
+    }
   }
 
 }

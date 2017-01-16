@@ -1,0 +1,49 @@
+<md-card class="app-card card-basic">
+  <md-toolbar color="primary">Status Detail</md-toolbar>
+  <md-card-content>
+    <md-progress-spinner mode="indeterminate" color="warn" *ngIf="isLoading"></md-progress-spinner>
+    
+    <form (ngSubmit)="saveTicketStatus()" [formGroup]="ticketStatusForm">
+      <div *ngIf="!isLoading">
+
+        <table style="width: 100%" cellspacing="0">
+          <tr>
+            <td colspan="2">
+              <md-input class="control-full-width" placeholder="Status" formControlName="Name" style="width: 100%"></md-input>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2">&nbsp;
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <md-select  placeholder="Sort Order" formControlName="SortOrder">
+                <md-option *ngFor="let order of SortOrders" [value]="order">
+                  {{order}}
+                </md-option>
+              </md-select>
+            </td>
+            <td>
+              <md-checkbox  formControlName="IsDefault">Is Default</md-checkbox>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </form>
+  </md-card-content>
+  <md-card-actions align="end">
+    <button md-raised-button color="primary" *ngIf="!isLoading" (click)="save()" aria-label="Show an example snack-bar">
+      Save
+    </button>
+    <button md-raised-button color="accent" *ngIf="!isLoading" (click)="delete()" aria-label="Show an example snack-bar">
+      Delete
+    </button>
+    <button md-raised-button (click)="onBack()">
+        <i class="glyphicon glyphicon-chevron-left"></i> Back
+    </button>
+  </md-card-actions>
+  <md-card-footer>
+    <md-progress-bar mode="indeterminate" *ngIf="isLoading"></md-progress-bar>
+  </md-card-footer>
+</md-card>

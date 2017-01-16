@@ -1,0 +1,22 @@
+
+ <h2 md-dialog-title>{{Title}}</h2>
+
+    <md-dialog-content>
+     
+      <p>
+        {{Message}}
+      </p>
+    </md-dialog-content>
+
+    <md-dialog-actions>
+      <button 
+        md-raised-button 
+        color="primary" 
+        (click)="dialogRef.close(1)" 
+        >Ok</button>
+
+       <button 
+        md-raised-button 
+        color="primary" 
+        md-dialog-close>Cancel</button>
+    </md-dialog-actions>

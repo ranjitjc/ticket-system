@@ -1,5 +1,6 @@
-<div class="demo">
-  <md-card class="demo-card demo-basic">
+<div class="app-div" *ngIf="LoggedInState | async">
+
+  <md-card class="app-card card-basic">
     <md-toolbar color="primary">My Tickets</md-toolbar>
     <md-card-content>
         <md-nav-list>
@@ -12,16 +13,36 @@
     </md-card-content>
   </md-card>
 
-  <md-card class="demo-card demo-basic">
+  <md-card class="app-card card-basic">
     <md-toolbar color="primary">Assigned Tickets</md-toolbar>
     <md-card-content>
       <md-nav-list>
         <a md-list-item *ngFor="let ticket of assignedTickets" href="ticket?Id={{ ticket.Id }}">
           <md-icon md-list-icon>folder</md-icon>
           <span md-line>{{ ticket.subject }}</span>
-          <span md-line class="demo-secondary-text"> {{ ticket.message }} </span>
+          <span md-line class="app-secondary-text"> {{ ticket.message }} </span>
         </a>
       </md-nav-list>
     </md-card-content>
   </md-card>
+
 </div>
+
+
+<md-card class="app-card card-basic" *ngIf="LoggedInState | async">
+  <md-toolbar color="primary">Login Parameters</md-toolbar>
+  <md-card-content>
+    <p>UserName:<b>{{ currentUser?.user.userName}}</b></p>
+    <p>FullName:<b>{{ currentUser?.user.fullName}}</b></p>
+  </md-card-content>
+</md-card>
+
+
+<md-card class="app-card card-basic" *ngIf="LoggedInErrorState | async">
+  <md-toolbar color="primary">Authorization</md-toolbar>
+  <md-card-content>
+    <p>Your are not authrized to use the Ticket System.Please contact helpdesk.</p>
+  </md-card-content>
+</md-card>
+{{LoggedInState | async}}
+{{LoggedInErrorState | async}}

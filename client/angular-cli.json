@@ -18,10 +18,12 @@
       "prefix": "app",
       "mobile": false,
       "styles": [
-        "styles.css",
+        "styles.scss",
         "app-theme.scss"
       ],
-      "scripts": [],
+      "scripts": [
+        "../node_modules/lodash/lodash.js"
+      ],
       "environments": {
         "source": "environments/environment.ts",
         "dev": "environments/environment.ts",
@@ -42,7 +44,7 @@
     }
   },
   "defaults": {
-    "styleExt": "css",
+    "styleExt": "scss",
     "prefixInterfaces": false,
     "inline": {
       "style": false,

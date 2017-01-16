@@ -1,0 +1,74 @@
+/* You can add global styles to this file, and also import other style files */
+
+body {
+  margin: 0;
+}
+
+.app-div {
+//   display: flex;
+//   flex-flow: row wrap;
+
+  md-list, md-nav-list {
+    // border: 1px solid rgba(0, 0, 0, 0.12);
+    width: 100%;
+    margin: 0 0 0 0;
+
+  }
+  h2 {
+    margin-top: 20px;
+  }
+
+  md-icon {
+    color: rgba(0, 0, 0, 0.12);
+  }
+
+  [md-list-icon] {
+    color: white;
+    background: rgba(0, 0, 0, 0.3);
+  }
+}
+
+.card-basic {
+  padding: 0;
+}
+
+.card-basic md-card-content {
+  padding: 16px;
+}
+
+.card-basic md-card-actions {
+    margin-left: 0; 
+    margin-right: 0; 
+    padding: 8px;
+  }
+
+.control-full-width {
+  width: 100%;
+}
+
+.card-icons {
+  font-size: 100%;
+  height: inherit;
+  vertical-align: top;
+  width: inherit;
+}
+
+.app-card {
+  margin: 16px;
+}
+
+md-card-actions {
+    margin-left: 0; 
+    margin-right: 0; 
+    padding: 8px;
+}
+
+md-progress-spinner{
+    margin: 0 auto;
+    height: 40px;
+    width: 40px;
+}
+
+.error md-icon svg {
+  fill: red;
+}
