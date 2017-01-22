@@ -7,6 +7,7 @@ import { MaterialModule } from '@angular/material';
 import { StatusComponent } from './status.component';
 import { StatusDetailComponent } from './detail/status.detail.component';
 
+import { StatusGuard , StatusEditGuard } from './status.guard'
 import { StatusService, TicketStatus } from '../services/status.service';
 
 @NgModule({
@@ -20,13 +21,10 @@ import { StatusService, TicketStatus } from '../services/status.service';
     RouterModule.forChild([
       { path: 'status', component: StatusComponent },
       { path: 'status/:id',
-        //canActivate: [ ProductDetailGuard],
+        canActivate: [ StatusGuard],
+        canDeactivate: [ StatusEditGuard ],
         component: StatusDetailComponent
       },
-    //   { path: 'productEdit/:id',
-    //     canDeactivate: [ ProductEditGuard ],
-    //     component: ProductEditComponent 
-    //   },
     ])
   ],
   declarations: [
@@ -37,8 +35,8 @@ import { StatusService, TicketStatus } from '../services/status.service';
   ],
   providers: [
     StatusService,
-    //ProductDetailGuard,
-    //ProductEditGuard
+    StatusGuard,
+    StatusEditGuard
   ]
 })
 export class StatusModule {}

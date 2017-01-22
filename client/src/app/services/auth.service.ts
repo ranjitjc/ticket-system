@@ -43,7 +43,10 @@ export class AuthenticationService {
     //login(username: string, password: string): Promise<CurrentUser> {
     login(): Observable<CurrentUser> {
 
-        let url =  environment.apiURL + "security";
+        let url =  environment.apiURL + "account";
+
+        // return false to indicate failed login
+            localStorage.removeItem('currentUser');
         /*
         let body = "username=" + username + "&password=" + password + "&grant_type=password";
         body = JSON.stringify({ username: username, password: password });
@@ -72,7 +75,7 @@ export class AuthenticationService {
     } 
 
     protected extractArray(res: Response, showprogress: boolean = true) {
-        let user = res.json() || {};
+        let user : CurrentUser = res.json() || {};
         // login successful if there's a jwt token in the response
         let token = user && user.accessToken;
         if (token) {
