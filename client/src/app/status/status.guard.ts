@@ -31,7 +31,7 @@ export  class StatusEditGuard implements CanDeactivate<StatusDetailComponent> {
 
     canDeactivate(component: StatusDetailComponent): boolean {
         if (component.ticketStatusForm.dirty) {
-            let name = component.ticketStatusForm.get('Name').value || 'New Status';
+            let name = component.ticketStatusForm.get('name').value || 'New Status';
             //TODO: Convert to mdDialog
             return confirm(`Navigate away and lose all changes to ${name}?`);
         }

@@ -7,6 +7,9 @@ import { ConfirmationService } from '../../shared/confirmation/confirmation.serv
 
 import { StatusService, TicketStatus } from '../../services/status.service';
 
+import {NotificationService, Notification} from '../../shared/notification/notification.service';
+
+
 import { Observable, BehaviorSubject } from 'rxjs/Rx';
 import { Subscription }       from 'rxjs/Subscription';
 
@@ -23,6 +26,7 @@ export class StatusDetailComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @ViewChildren(FormControlName, { read: ElementRef }) formInputElements: ElementRef[];
   isLoading:Boolean;
+  isSaving:Boolean;
   ticketStatus: TicketStatus;
   private sub: Subscription;
   ticketStatusForm: FormGroup;
@@ -49,18 +53,19 @@ export class StatusDetailComponent implements OnInit, AfterViewInit, OnDestroy {
               public snackBar: MdSnackBar,
               public confirmService: ConfirmationService,
               private viewContainerRef: ViewContainerRef,
-              private _service: StatusService) { 
+              private _service: StatusService, 
+              private _notification: NotificationService) { 
     this.isLoading= true;
 
     // Defines all of the validation messages for the form.
     // These could instead be retrieved from a file or database.
     this.validationMessages = {
-        Name: {
+        name: {
             required: 'Status is required.',
             minlength: 'Status must be at least three characters.',
             maxlength: 'Status cannot exceed 50 characters.'
         },
-        SortOrder: {
+        sortOrder: {
             range: 'Rate the product between 1 (lowest) and 5 (highest).'
         }
     };
@@ -94,12 +99,13 @@ export class StatusDetailComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
         this.ticketStatusForm = this.fb.group({
-          Name :  ['', [Validators.required,
+          name :  ['', [Validators.required,
                         Validators.minLength(3),
                         Validators.maxLength(50)]
                   ],
-          SortOrder: ['', NumberValidators.range(1, 5)],
-          IsDefault : 0
+          //sortOrder: ['', NumberValidators.range(1, 5)],
+          sortOrder: '',
+          isDefault : 0
         });
         
         
@@ -120,6 +126,18 @@ export class StatusDetailComponent implements OnInit, AfterViewInit, OnDestroy {
         this.sub.unsubscribe();
     }
 
+    notify(action, message){
+      let notify : Notification = {
+        action : action,
+        component : "StatusDetailComponent",
+        message : message,
+        time : new Date()
+      }
+      console.log('from StatusDetailComponent:' + action + " : " + message);
+      this._notification.publish(notify);
+
+    }
+
   
   getTicketStatus(id:Number){
 
@@ -134,7 +152,7 @@ export class StatusDetailComponent implements OnInit, AfterViewInit, OnDestroy {
     )
     }else{
       //New
-      var ticketStatus = {id:0, name:'', sortOrder:20, isDefault:0};
+      var ticketStatus = {id:0, name:'', sortOrder:this.totalCount, isDefault:0};
       this.onTicketStatusRetrieved( ticketStatus);
             this.isLoading= false;
     }
@@ -153,9 +171,9 @@ export class StatusDetailComponent implements OnInit, AfterViewInit, OnDestroy {
     
     
       this.ticketStatusForm.patchValue({
-        Name : ticketStatus.name,
-        SortOrder: ticketStatus.sortOrder,
-        IsDefault : ticketStatus.isDefault
+        name : ticketStatus.name,
+        sortOrder: ticketStatus.sortOrder,
+        isDefault : ticketStatus.isDefault
       });
 
     }
@@ -165,31 +183,76 @@ export class StatusDetailComponent implements OnInit, AfterViewInit, OnDestroy {
   
 
   save(){
+    if (this.ticketStatusForm.dirty && this.ticketStatusForm.valid) {
+      let status = Object.assign({}, this.ticketStatus, this.ticketStatusForm.value);
+      //TODO:call service to detele the current TicketStatus
+      this.isSaving= true;
+      let msg = `New TicketStatus [${status.name}] has been created.`;
+      if (status.id > 0){
+        msg = `[${status.name}]] TicketStatus has been updated.`;
+      }
+      this._service.save(status).subscribe(
+          data => {
 
-    let status = Object.assign({}, this.ticketStatus, this.ticketStatusForm.value);
-    //TODO:call service to detele the current TicketStatus
-    this.openSnackBar('Successfully saved');
+              // for (let i:number=0; i<100000000000; i++){
+              //   let d= i++;
+              // }
+              console.log(data);
+              this.notify("Save Ticket Status",msg);
+              this.openSnackBar('Successfully saved');
+              this.onSaveComplete();
+              this.isSaving= false;
+          },
+          (error:any) => {
+            this.errorMessage = <any>error;
+            this.isSaving= false;
+          }
+      )
 
-      this.ticketStatusForm.reset();
-    
-    this.router.navigate(['/status']);
+      
+    }else if (!this.ticketStatusForm.dirty) {
+        this.onSaveComplete();
+        this.isSaving= false;            
+    }    
   }
 
+  onSaveComplete(): void {
+        // Reset the form to clear the flags
+        this.ticketStatusForm.reset();
+        this.router.navigate(['/status']);
+    }
+
   delete(){
+    if (this.ticketStatusForm.valid) {
+      let status = Object.assign({}, this.ticketStatus, this.ticketStatusForm.value);
+      this.confirmService
+        .confirm('Delete Confirmation', 'Are you sure to delete this Status?', this.viewContainerRef)
+        .subscribe( 
+          result => {
+          if (result ){
+            //TODO:call service to detele the current TicketStatus
 
-    this.confirmService
-      .confirm('Delete Confirmation', 'Are you sure to delete this Status?', this.viewContainerRef)
-      .subscribe( 
-        result => {
-        if (result ){
-          //TODO:call service to detele the current TicketStatus
-          this.openSnackBar('Successfully deleted');
-          this.ticketStatusForm.reset();
-          this.router.navigate(['/status']);
-        }
-    
-  });
+            this.isSaving= true;
+            this._service.delete(status.id).subscribe(
+                data => {
 
+                    console.log(data);
+                    this.notify("Delete Ticket Status",`[${status.name}] TicketStatus has been deleted.`)
+                    this.openSnackBar('Successfully deleted');
+                    this.onSaveComplete();
+                    this.isSaving= false;
+                },
+                (error:any) => {
+                  this.errorMessage = <any>error;
+                  this.isSaving= false;
+                }
+            )
+          }
+      
+    });
+    }else{
+
+    }
 
     
   }
