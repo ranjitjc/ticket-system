@@ -1,6 +1,13 @@
 
   <md-card class="app-card card-basic status-card">
-    <md-toolbar color="primary">Status</md-toolbar>
+    <md-toolbar color="primary">Status
+      <span class="app-toolbar-filler"></span>
+      <a md-icon-button color="accent" [class.m2app-dark]="isDarkTheme"
+         [routerLink]="['/status', 0]"
+         [queryParams] = "{count: totalCount}">
+         <md-icon class="md-12">add</md-icon>
+      </a>
+    </md-toolbar>
     <md-card-content>
         <!--<md-grid-list cols="1" *ngIf="isDisplay">
             <md-grid-tile>-->
@@ -17,7 +24,8 @@
         </md-grid-list>-->
         <md-nav-list>
           <a md-list-item *ngFor="let status of statuses"
-            [routerLink]="['/status', status.id]">
+            [routerLink]="['/status', status.id]"
+            [queryParams] = "{count: totalCount}">
             <md-icon md-list-icon>poll</md-icon>
             <span md-line>{{status.name}}</span>
           </a>

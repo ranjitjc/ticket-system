@@ -1,7 +1,11 @@
-import {Component, OnInit, Optional, NgZone, ViewEncapsulation} from '@angular/core';
+import {Component, OnInit, Optional, NgZone, ViewEncapsulation,ViewContainerRef} from '@angular/core';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { Observable, Subject } from 'rxjs/Rx';
+
+// import {MdDialog, MdDialogRef, MdDialogConfig} from '@angular/material';
+
+import {NotificationService} from './shared/notification/notification.service';
 
 import { CurrentUser, AuthenticationService } from './services/auth.service';
 
@@ -32,16 +36,14 @@ export class AppComponent implements OnInit{
       private router: Router,
       private location: Location,
       private ngZone: NgZone,
-      private _authService: AuthenticationService
+      private _authService: AuthenticationService,
+      private NotificationService: NotificationService, 
+      private viewContainerRef: ViewContainerRef
      ) {
-       //this.fullName = <BehaviorSubject<string>> new BehaviorSubject('');
        this.fullName =new Subject();
+       
     }
 
-     
-
-
-    
 
   ngOnInit(){
     //this._authenticationService.login().subscribe();
@@ -72,4 +74,19 @@ export class AppComponent implements OnInit{
           console.log('AppComponent:ctor.Completed') 
       );
   }
+
+
+
+openNotification(){
+     this.NotificationService
+      .show(this.viewContainerRef)
+      .subscribe(res => {
+        console.log('Dialog Result'+ res)
+        if (res){
+          this.NotificationService.logs =[];
+        }
+  });
+    
+  }
+
 }

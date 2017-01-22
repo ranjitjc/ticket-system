@@ -65,7 +65,8 @@
       <!--<i class="material-icons">settings_applications</i>-->
       <!--</button>-->
 
-       <button md-icon-button [class.m2app-dark]="isDarkTheme">
+       <button md-icon-button [class.m2app-dark]="isDarkTheme"
+            (click)="openNotification()">
          <md-icon class="md-12">notifications</md-icon>
       </button>
       <button md-icon-button [md-menu-trigger-for]="menu">

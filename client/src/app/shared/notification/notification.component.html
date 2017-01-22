@@ -1,0 +1,29 @@
+
+ <h2 md-dialog-title>{{title}}</h2>
+
+    <md-dialog-content>
+      <p>{{ message }}</p>
+      
+        <md-nav-list dense>
+          <md-list-item *ngFor="let notification of notifications | reverse">
+            <h3 md-line> {{notification.time  | date:"MM/dd/yy hh:mm:ss"}} </h3>
+            <span md-line>{{notification.component}}</span>
+            <span md-line>{{notification.message}}</span>
+            <button md-icon-button (click)="delete(notification.time)"><md-icon class="md-12">delete</md-icon></button>
+          </md-list-item>
+        </md-nav-list>
+      
+    </md-dialog-content>
+
+    <md-dialog-actions>
+      <button 
+        md-raised-button 
+        color="primary" 
+        (click)="dialogRef.close(1)" 
+        >Clear All</button>
+
+       <button 
+        md-raised-button 
+        color="primary" 
+        md-dialog-close>Cancel</button>
+    </md-dialog-actions>

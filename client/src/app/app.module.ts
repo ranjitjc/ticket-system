@@ -7,8 +7,6 @@ import { MaterialModule } from '@angular/material';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app.routing.module'
 
-import { ConfirmDialog } from './shared/confirm.dialog'
-
 import { AuthGuard} from './security/auth.guard';
 import { AuthenticationService } from './services/auth.service';
 
@@ -21,6 +19,10 @@ import { CategoryComponent } from './category/category.component';
 import { TicketComponent } from './ticket/ticket.component';
 import { SearchComponent } from './search/search.component';
 
+import {NotificationModule } from './shared/notification/notification.module';
+import {ConfirmationModule } from './shared/confirmation/confirmation.module';
+
+
 @NgModule({
   declarations: [
     AppComponent, 
@@ -29,19 +31,20 @@ import { SearchComponent } from './search/search.component';
     MaterialComponent, 
     //LoginComponent, 
     //StatusComponent, 
-    ConfirmDialog,
     CategoryComponent, 
     TicketComponent, 
-    SearchComponent
+    SearchComponent, 
+    
   ],
-  entryComponents: [ConfirmDialog],
   imports: [
     BrowserModule,
     FormsModule,
     HttpModule,
     MaterialModule.forRoot(),
     AppRoutingModule,
-    StatusModule
+    StatusModule,
+    NotificationModule,
+    ConfirmationModule
   ],
   providers: [AuthGuard, AuthenticationService],
   bootstrap: [ AppComponent ]
