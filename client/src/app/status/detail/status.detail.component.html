@@ -1,5 +1,5 @@
 <md-card class="app-card card-basic">
-  <md-toolbar color="primary">Status Detail</md-toolbar>
+  <md-toolbar color="primary">{{pageTitle}}</md-toolbar>
   <md-card-content>
     <md-progress-spinner mode="indeterminate" color="warn" *ngIf="isLoading"></md-progress-spinner>
     
@@ -9,7 +9,11 @@
         <table style="width: 100%" cellspacing="0">
           <tr>
             <td colspan="2">
-              <md-input class="control-full-width" placeholder="Status" formControlName="Name" style="width: 100%"></md-input>
+              <md-input class="control-full-width" placeholder="Status" formControlName="Name" 
+                dividerColor="{{ !ticketStatusForm.get('Name').valid ? 'warn' : 'primary' }}" 
+                style="width: 100%">
+                <md-hint *ngIf="displayMessage.Name" [ngStyle]="{'color': 'red'}" align="start">{{displayMessage.Name}}</md-hint>
+              </md-input>
             </td>
           </tr>
           <tr>
@@ -23,20 +27,24 @@
                   {{order}}
                 </md-option>
               </md-select>
+              <span [ngStyle]="{'color': 'red'}" *ngIf="displayMessage.SortOrder">
+                      {{displayMessage.SortOrder}}
+              </span>
             </td>
             <td>
-              <md-checkbox  formControlName="IsDefault">Is Default</md-checkbox>
+              <md-checkbox formControlName="IsDefault">Is Default</md-checkbox>
             </td>
           </tr>
         </table>
       </div>
     </form>
+    <div class='has-error' *ngIf='errorMessage'>{{errorMessage}}</div>
   </md-card-content>
   <md-card-actions align="end">
-    <button md-raised-button color="primary" *ngIf="!isLoading" (click)="save()" aria-label="Show an example snack-bar">
+    <button md-raised-button color="primary" *ngIf="!isLoading" [disabled]='!ticketStatusForm.valid' (click)="save()" aria-label="Show an example snack-bar">
       Save
     </button>
-    <button md-raised-button color="accent" *ngIf="!isLoading" (click)="delete()" aria-label="Show an example snack-bar">
+    <button md-raised-button color="accent" *ngIf="!isLoading && this.ticketStatus.id > 0" (click)="delete()" aria-label="Show an example snack-bar">
       Delete
     </button>
     <button md-raised-button (click)="onBack()">

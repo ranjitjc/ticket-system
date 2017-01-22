@@ -1,16 +1,17 @@
-import { Component, OnInit, AfterViewInit, OnDestroy, ViewChildren, ElementRef } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy, ViewChildren, ElementRef, ViewContainerRef } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, FormArray, Validators, FormControlName } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import {MdSnackBar, MdSnackBarConfig} from '@angular/material';
 import {MdDialog, MdDialogRef, MdDialogConfig} from '@angular/material';
-
-import { ConfirmDialog } from '../../shared/confirm.dialog'
+import { ConfirmationService } from '../../shared/confirmation/confirmation.service'
 
 import { StatusService, TicketStatus } from '../../services/status.service';
 
 import { Observable, BehaviorSubject } from 'rxjs/Rx';
 import { Subscription }       from 'rxjs/Subscription';
 
+import { NumberValidators } from '../../shared/number.validator';
+import { GenericValidator } from '../../shared/generic.validator';
 
 
 @Component({
@@ -19,68 +20,100 @@ import { Subscription }       from 'rxjs/Subscription';
   styleUrls: ['./status.detail.component.scss']
 })
 export class StatusDetailComponent implements OnInit, AfterViewInit, OnDestroy {
+
+  @ViewChildren(FormControlName, { read: ElementRef }) formInputElements: ElementRef[];
   isLoading:Boolean;
   ticketStatus: TicketStatus;
   private sub: Subscription;
   ticketStatusForm: FormGroup;
   SortOrders : number[];
+  errorMessage:any;
+  pageTitle:string;
+  totalCount : number;
 
-  dialogRef: MdDialogRef<ConfirmDialog>;
-  lastCloseResult: Number;
-  config: MdDialogConfig = {
-    disableClose: true,
-    width: '',
-    height: '',
-    position: {
-      top: '',
-      bottom: '',
-      left: '',
-      right: ''
-    }
-  };
+  // Use with the generic validation message class
+  displayMessage: { [key: string]: string } = {};
+  private validationMessages: { [key: string]: { [key: string]: string } };
+  private genericValidator: GenericValidator;
+
+  //snackBar variables
+  message: string = 'Snack Bar opened.';
+  actionButtonLabel: string = 'Retry';
+  action: boolean = false;
+  setAutoHide: boolean = true;
+  autoHide: number = 2000;
 
   constructor(private fb: FormBuilder,
               private route: ActivatedRoute,
               private router: Router,
               public snackBar: MdSnackBar,
-              public dialog: MdDialog,
+              public confirmService: ConfirmationService,
+              private viewContainerRef: ViewContainerRef,
               private _service: StatusService) { 
     this.isLoading= true;
 
-  this.SortOrders = [];
-    
+    // Defines all of the validation messages for the form.
+    // These could instead be retrieved from a file or database.
+    this.validationMessages = {
+        Name: {
+            required: 'Status is required.',
+            minlength: 'Status must be at least three characters.',
+            maxlength: 'Status cannot exceed 50 characters.'
+        },
+        SortOrder: {
+            range: 'Rate the product between 1 (lowest) and 5 (highest).'
+        }
+    };
 
-    for (var _i = 0; _i < 20; _i++) {
-        this.SortOrders.push(_i);
-    }
+    // Define an instance of the validator for use with this form, 
+    // passing in this form's set of validation messages.
+    this.genericValidator = new GenericValidator(this.validationMessages);
+
+    this.SortOrders = [];
+    
 
   }
 
     ngOnInit() {
        this.sub = this.route.params.subscribe(
             params => {
-                let id = +params['id'];
+                let id = params['id'];
                 console.log('id :' + id);
                 this.getTicketStatus(id);
         });
 
-        this.ticketStatusForm = this.fb.group({
-          Name : '',
-          SortOrder: 0,
-          IsDefault : 0
+        this.sub = this.route.queryParams.subscribe(
+            params => {
+                this.totalCount = params['count'] ;
+                this.totalCount++;
+                for (var _i = 1; _i <= this.totalCount ; _i++) {
+                    this.SortOrders.push(_i);
+                }
+                console.log('id :' + this.totalCount);
         });
 
+
+        this.ticketStatusForm = this.fb.group({
+          Name :  ['', [Validators.required,
+                        Validators.minLength(3),
+                        Validators.maxLength(50)]
+                  ],
+          SortOrder: ['', NumberValidators.range(1, 5)],
+          IsDefault : 0
+        });
+        
+        
     }
 
   ngAfterViewInit(): void {
-        // // Watch for the blur event from any input element on the form.
-        // let controlBlurs: Observable<any>[] = this.formInputElements
-        //     .map((formControl: ElementRef) => Observable.fromEvent(formControl.nativeElement, 'blur'));
+        // Watch for the blur event from any input element on the form.
+        let controlBlurs: Observable<any>[] = this.formInputElements
+            .map((formControl: ElementRef) => Observable.fromEvent(formControl.nativeElement, 'blur'));
 
-        // // Merge the blur event observable with the valueChanges observable
-        // Observable.merge(this.productForm.valueChanges, ...controlBlurs).debounceTime(800).subscribe(value => {
-        //     this.displayMessage = this.genericValidator.processMessages(this.productForm);
-        // });
+        // Merge the blur event observable with the valueChanges observable
+        Observable.merge(this.ticketStatusForm.valueChanges, ...controlBlurs).debounceTime(800).subscribe(value => {
+            this.displayMessage = this.genericValidator.processMessages(this.ticketStatusForm);
+        });
     }
 
     ngOnDestroy() {
@@ -89,55 +122,79 @@ export class StatusDetailComponent implements OnInit, AfterViewInit, OnDestroy {
 
   
   getTicketStatus(id:Number){
-    this._service.GetById(id).subscribe(data => {
+
+    if (id >0){
+    this._service.GetById(id).subscribe(
+        data => {
             this.onTicketStatusRetrieved(data);
             this.isLoading= false;
             console.table(data);
-        })
+        },
+        (error:any) => this.errorMessage = <any>error
+    )
+    }else{
+      //New
+      var ticketStatus = {id:0, name:'', sortOrder:20, isDefault:0};
+      this.onTicketStatusRetrieved( ticketStatus);
+            this.isLoading= false;
+    }
   }
 
   onTicketStatusRetrieved(ticketStatus: TicketStatus): void {
+    if(this.ticketStatusForm){
+      this.ticketStatusForm.reset();
+    }
+    this.ticketStatus = ticketStatus;
+
+    if (this.ticketStatus.id === 0) {
+        this.pageTitle = 'Add New Ticket Status';
+    } else {
+        this.pageTitle = `Edit Ticket Status : ${this.ticketStatus.name}`;
+    
+    
       this.ticketStatusForm.patchValue({
         Name : ticketStatus.name,
         SortOrder: ticketStatus.sortOrder,
         IsDefault : ticketStatus.isDefault
-      })
+      });
+
+    }
 
   }
 
-   message: string = 'Snack Bar opened.';
-  actionButtonLabel: string = 'Retry';
-  action: boolean = false;
-  setAutoHide: boolean = true;
-  autoHide: number = 1000;
+  
 
   save(){
+
+    let status = Object.assign({}, this.ticketStatus, this.ticketStatusForm.value);
+    //TODO:call service to detele the current TicketStatus
     this.openSnackBar('Successfully saved');
+
+      this.ticketStatusForm.reset();
+    
     this.router.navigate(['/status']);
   }
 
   delete(){
 
-    this.dialogRef = this.dialog.open(ConfirmDialog, this.config);
-    this.dialogRef.componentInstance.Title = "Delete Confirmation.";
-    this.dialogRef.componentInstance.Message = "Are you sure to delete this Status?";
-    this.dialogRef.afterClosed().subscribe(result => {
-      console.log(result);
-      this.lastCloseResult = result;
-      this.dialogRef = null;
-      if (this.lastCloseResult ==1 ){
-        this.openSnackBar('Successfully deleted');
-        this.router.navigate(['/status']);
-      }
-    });
+    this.confirmService
+      .confirm('Delete Confirmation', 'Are you sure to delete this Status?', this.viewContainerRef)
+      .subscribe( 
+        result => {
+        if (result ){
+          //TODO:call service to detele the current TicketStatus
+          this.openSnackBar('Successfully deleted');
+          this.ticketStatusForm.reset();
+          this.router.navigate(['/status']);
+        }
+    
+  });
+
+
     
   }
 
   openSnackBar(message) {
-    // this.snackBar.openFromComponent(MessageSnackComponent, {
-    //   duration: 500,
-    // });
-
     let config = new MdSnackBarConfig();
     config.duration = this.autoHide;
     this.snackBar.open(message, this.action && this.actionButtonLabel, config);
@@ -148,13 +205,3 @@ export class StatusDetailComponent implements OnInit, AfterViewInit, OnDestroy {
         this.router.navigate(['/status']);
     }
 }
-
-
-
-@Component({
-  selector: 'snack-bar-component',
-  template: `Confirmed!!!`,
-  //styleUrls: ['./snack-bar-component-example-snack.css'],
-})
-export class MessageSnackComponent {}
-
