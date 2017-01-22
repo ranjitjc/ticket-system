@@ -14,7 +14,7 @@ export  class StatusGuard implements CanActivate {
         let id = +route.url[1].path;
         if (isNaN(id) ) { // || id < 1) {
             //TODO: Convert to mdDialog
-            alert('Invalid product Id');
+            alert('Invalid status Id');
             // start a new navigation to redirect to list page
             this.router.navigate(['/status']);
             // abort current navigation
@@ -31,7 +31,7 @@ export  class StatusEditGuard implements CanDeactivate<StatusDetailComponent> {
 
     canDeactivate(component: StatusDetailComponent): boolean {
         if (component.ticketStatusForm.dirty) {
-            let name = component.ticketStatusForm.get('Name').value || 'New Product';
+            let name = component.ticketStatusForm.get('Name').value || 'New Status';
             //TODO: Convert to mdDialog
             return confirm(`Navigate away and lose all changes to ${name}?`);
         }
