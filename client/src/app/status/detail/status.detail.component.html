@@ -38,7 +38,7 @@
         </table>
       </div>
     </form>
-    <div class='has-error' *ngIf='errorMessage'>{{errorMessage}}</div>
+    
   </md-card-content>
   <md-card-actions align="end">
     <button md-raised-button color="primary" *ngIf="!isLoading" [disabled]='!ticketStatusForm.valid || isSaving' (click)="save()" aria-label="Show an example snack-bar">
@@ -52,6 +52,13 @@
     </button>
   </md-card-actions>
   <md-card-footer>
+    <md-card class="error-card" *ngIf="errorMessage">
+        <md-card-content>
+          <md-icon class="error-icon">report_problem</md-icon>
+          <span class="error-msg">{{errorMessage }}</span>
+        </md-card-content>
+      </md-card>
     <md-progress-bar mode="indeterminate" *ngIf="isLoading || isSaving"></md-progress-bar>
+    
   </md-card-footer>
 </md-card>
