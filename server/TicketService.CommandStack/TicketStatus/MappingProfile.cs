@@ -6,10 +6,9 @@ namespace TicketService.Controllers.Status
     {
         public MappingProfile()
         {
-            CreateMap<Domain.TicketStatus, QueryStack.TicketStatus.TicketStatusModel>();
             CreateMap<CommandStack.TicketStatus.Create.Command, Domain.TicketStatus>(MemberList.Source);
-            //CreateMap<Department, Edit.Command>().ReverseMap();
-            //CreateMap<Department, Delete.Command>();
+            CreateMap<Domain.TicketStatus, CommandStack.TicketStatus.Update.Command>().ReverseMap();
+            CreateMap<Domain.TicketStatus, CommandStack.TicketStatus.Delete.Command>();
         }
     }
 }

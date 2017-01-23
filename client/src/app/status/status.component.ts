@@ -32,15 +32,6 @@ export class StatusComponent extends OnInit {
             this.statuses = data;
             this.totalCount = data.length;
             this.isLoading= false;
-
-            let notify : Notification = {
-                action : "Get TicketStatus list",
-                component : "StatusComponent",
-                message : "Ticket Status got from the server",
-                time : new Date()
-                }
-            console.log('from StatusComponent:');
-            this._notification.publish(notify);
             },
             err => {
                 console.error("StatusComponent.ngOnit :" + err);

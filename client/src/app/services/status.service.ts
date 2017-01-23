@@ -35,24 +35,36 @@ export class StatusService {
         let options = new RequestOptions({ headers: headers });
 
         if (ticketStatus.id == 0) {
-            return this.createProduct(ticketStatus, options);
+            return this.createStatus(ticketStatus, options);
         }
-        return this.updateProduct(ticketStatus, options);
+        return this.updateStatus(ticketStatus, options);
     }
 
-    private createProduct(ticketStatus: TicketStatus, options: RequestOptions): Observable<TicketStatus> {
+    private createStatus(ticketStatus: TicketStatus, options: RequestOptions): Observable<TicketStatus> {
         //ticketStatus.id = undefined;
-        return this._http.post(this.baseUrl, ticketStatus, options)
-            .map(this.extractData)
-            .do(data => console.log('createProduct: ' + JSON.stringify(data)))
+        //return this._http.post(this.baseUrl, ticketStatus, options)
+        
+        return this._http.post(this.baseUrl, ticketStatus)
+            .map(this.extractData).delay(3000)
+            .do(data => console.log('createStatus: ' + JSON.stringify(data)))
             .catch(this.handleError);
     }
 
-    private updateProduct(ticketStatus: TicketStatus, options: RequestOptions): Observable<TicketStatus> {
-        const url = `${this.baseUrl}/${ticketStatus.id}`;
-        return this._http.put(url, ticketStatus, options)
+    private updateStatus(ticketStatus: TicketStatus, options: RequestOptions): Observable<TicketStatus> {
+        const url = `${this.baseUrl}`; ///${ticketStatus.id}`;
+        return this._http.put(url, ticketStatus).delay(3000)
             .map(() => ticketStatus)
-            .do(data => console.log('updateProduct: ' + JSON.stringify(data)))
+            .do(data => console.log('updateStatus: ' + JSON.stringify(data)))
+            .catch(this.handleError);
+    }
+
+      delete(id: number): Observable<Response> {
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        let options = new RequestOptions({ headers: headers });
+
+        const url = `${this.baseUrl}/${id}`;
+        return this._http.delete(url).delay(3000)
+            .do(data => console.log('deleteStatus: ' + JSON.stringify(data)))
             .catch(this.handleError);
     }
 

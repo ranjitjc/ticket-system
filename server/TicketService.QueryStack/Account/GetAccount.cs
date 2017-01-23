@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TicketService.Repository;
+using System.Security.Claims;
 
 namespace TicketService.QueryStack
 {
@@ -59,11 +60,21 @@ namespace TicketService.QueryStack
                             AccessToken = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                         });
 
-                // var sql = query.ToSql();
-                // _logger.LogInformation("StatusController:Index:Query => " + sql);
 
 
-                return await query.SingleOrDefaultAsync();
+                var sql = query.ToSql();
+                _logger.LogInformation("AccountController:GetAccount:Query => " + sql);
+
+
+                UserModel user = await query.SingleOrDefaultAsync();
+
+
+                //ClaimsIdentity identity = new ClaimsIdentity(message.loginName.ToLower());
+                //ClaimsPrincipal principal = new ClaimsPrincipal(identity);
+
+
+
+                return user;
                 
                
 

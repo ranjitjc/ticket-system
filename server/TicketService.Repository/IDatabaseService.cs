@@ -12,6 +12,6 @@ namespace TicketService.Repository
 
         DbSet<Domain.TicketStatus> TicketStatuses { get; set; }
 
-        void Save();
+        Task SaveAsync();
     }
 }

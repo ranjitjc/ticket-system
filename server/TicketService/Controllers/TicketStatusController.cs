@@ -8,9 +8,11 @@ using Microsoft.Extensions.Logging;
 using TicketService.QueryStack.TicketStatus;
 using TicketService.RealTime;
 using Microsoft.AspNetCore.SignalR.Infrastructure;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TicketService.Controllers
 {
+    [Authorize]
     [EnableCors("CorsPolicy")]
     [Route("api/[controller]")]
     public class TicketStatusController : ApiHubController<Broadcaster>
@@ -60,9 +62,35 @@ namespace TicketService.Controllers
         //[ValidateAntiForgeryToken]
         public async Task<int> Create([FromBody] CommandStack.TicketStatus.Create.Command model)
         {
+            if (!ModelState.IsValid)
+            {
+                BadRequest();
+            }
             _logger.LogInformation("StatusController:Create => " + model.Name);
                 
             return await _mediator.Send(model);
+        }
+
+        [HttpPut(Name = "UpdateTicketStatus")]
+        //[ValidateAntiForgeryToken]
+        public async Task Update([FromBody] CommandStack.TicketStatus.Update.Command model)
+        {
+            if (!ModelState.IsValid)
+            {
+                BadRequest();
+            }
+            _logger.LogInformation("StatusController:Update => " + model.Id);
+
+            await _mediator.Send(model);
+        }
+
+        [HttpDelete("{id}", Name = "DeleteTicketStatus")]
+        //[ValidateAntiForgeryToken]
+        public async Task Delete(CommandStack.TicketStatus.Delete.Command model)
+        {
+            _logger.LogInformation("StatusController:Delete => " + model.Id);
+
+            await _mediator.Send(model);
         }
 
     }

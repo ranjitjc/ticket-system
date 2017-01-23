@@ -1,5 +1,6 @@
 using System;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace TicketService.Repository
 {
@@ -40,9 +41,9 @@ namespace TicketService.Repository
             modelBuilder.Entity<Domain.TicketStatus>().ToTable("statuses");
         }
 
-        public void Save()
+        public async Task SaveAsync()
         {
-            this.SaveChanges();
+            await this.SaveChangesAsync();
         }
     }
 }
