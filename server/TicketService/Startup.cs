@@ -49,6 +49,8 @@ namespace TicketService
 
             services.AddSignalR(options => options.Hubs.EnableDetailedErrors = true);
 
+            services.AddSwaggerGen();
+
             services.AddAutoMapper();
 
             Mapper.AssertConfigurationIsValid();
@@ -79,6 +81,9 @@ namespace TicketService
 
             app.UseMvc();
             app.UseSignalR();
+
+            app.UseSwagger();
+            app.UseSwaggerUi();
         }
     }
 }
