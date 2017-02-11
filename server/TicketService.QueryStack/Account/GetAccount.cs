@@ -25,6 +25,8 @@ namespace TicketService.QueryStack
 
             public string FullName { get; set; }
 
+            public string Email { get; set; }
+
             public int IsAdmin { get; set; }
 
             public string AccessToken { get; set; }
@@ -57,7 +59,7 @@ namespace TicketService.QueryStack
                             UserName = userInDatabase.UserName,
                             FullName = userInDatabase.FirstName + ' ' + userInDatabase.LastName,
                             IsAdmin = userInDatabase.IsAdmin,
-                            AccessToken = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                            Email = userInDatabase.Email
                         });
 
 

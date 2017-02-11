@@ -22,6 +22,8 @@ namespace TicketService.Repository.SqlServer
 
         public DbSet<Domain.TicketProject> TicketProject { get; set; }
 
+        public DbSet<Domain.TicketPost> TicketPost { get; set; }
+
         public DbSet<Domain.Ticket> Ticket { get; set; }
 
 
@@ -49,6 +51,9 @@ namespace TicketService.Repository.SqlServer
             modelBuilder.Entity<Domain.TicketProject>().ToTable("projects")
                 .HasKey(k => k.Id);
 
+            modelBuilder.Entity<Domain.TicketPost>().ToTable("bug_posts")
+                .HasKey(k => k.Id);
+
             modelBuilder.Entity<Domain.User>()
                 .HasMany(m=> m.ReportedTickets)
                 .WithOne(w=> w.ReportedUser)
@@ -69,6 +74,8 @@ namespace TicketService.Repository.SqlServer
             //    .WithMany( m=> m.Tickets)
             //    .HasForeignKey(d => d.ReportedUserId);
 
+
+
             modelBuilder.Entity<Domain.TicketStatus>()
                 .HasMany(a => a.Tickets).WithOne(w => w.Status);
 
@@ -84,16 +91,26 @@ namespace TicketService.Repository.SqlServer
             modelBuilder.Entity<Domain.TicketOrganization>()
                .HasMany(a => a.Tickets).WithOne(w => w.Organization);
 
+            modelBuilder.Entity<Domain.TicketPost>()
+               .HasOne(a => a.Ticket)
+               .WithMany( m=> m.Posts)
+               .HasForeignKey(f=> f.TicketId);
 
-           // modelBuilder.Entity<Domain.Ticket>()
-                //.Ignore(o => o.AssignedUser)
-                //.Ignore(o => o.Status)
-                //.Ignore(o => o.Category)
-                //.Ignore(o => o.Priority)
-                //.Ignore(o => o.Project)
-                //.Ignore(o => o.Organization)
-                //.Ignore(o => o.LastUpdatedUser)
-                //;
+
+            modelBuilder.Entity<Domain.TicketPost>()
+               .HasOne(a => a.PostedUser)
+               .WithMany(m => m.Posts)
+               .HasForeignKey(f => f.PostedBy);
+
+            // modelBuilder.Entity<Domain.Ticket>()
+            //.Ignore(o => o.AssignedUser)
+            //.Ignore(o => o.Status)
+            //.Ignore(o => o.Category)
+            //.Ignore(o => o.Priority)
+            //.Ignore(o => o.Project)
+            //.Ignore(o => o.Organization)
+            //.Ignore(o => o.LastUpdatedUser)
+            //;
 
         }
 

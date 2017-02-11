@@ -1,23 +1,25 @@
+﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace TicketService.Domain
 {
-    [Table("statuses")]
-    public class TicketStatus
+    [Table("priorities")]
+    public class TicketPriority : IEntity
     {
-        [Column("st_id")]
+        [Column("pr_id")]
         public int Id { get; set; }
 
-        [Required]
-        [Column("st_name")]
+        [Column("pr_name")]
         public string Name { get; set; }
 
-        [Column("st_sort_seq")]
+
+        [Column("pr_sort_seq")]
         public int SortOrder { get; set; }
 
-        [Column("st_default")]
+        [Column("pr_default")]
         public int IsDefault { get; set; }
 
         public virtual ICollection<Domain.Ticket> Tickets { get; set; }

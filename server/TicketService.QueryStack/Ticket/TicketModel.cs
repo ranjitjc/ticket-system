@@ -50,12 +50,16 @@ namespace TicketService.QueryStack.Ticket
 
         public string OrganizationName { get; set; }
 
+        public ICollection<PostModel> Posts { get; set; }
+
         public TicketModel(string reportedUser, string assignedUser, string lastUpdatedUser)
         {
             ReportedUserName = reportedUser;
             AssignedUserName = assignedUser;
             LastUpdatedUserName = lastUpdatedUser;
         }
+
+        public TicketModel() { }
 
     }
 }

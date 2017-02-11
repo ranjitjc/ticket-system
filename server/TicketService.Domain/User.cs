@@ -32,5 +32,13 @@ namespace TicketService.Domain
         [Column("us_most_recent_login_datetime")]
         public DateTime RecentLoginTime { get; set; }
 
+        public virtual ICollection<Ticket> ReportedTickets { get; set; }
+
+        public virtual ICollection<Ticket> AssignedTickets { get; set; }
+
+        public virtual ICollection<Ticket> LastUpdatedTickets { get; set; }
+
+        public virtual ICollection<TicketPost> Posts { get; set; }
+
     }
 }
