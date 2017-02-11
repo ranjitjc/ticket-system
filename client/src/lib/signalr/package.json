@@ -1,0 +1,84 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "signalr@^2.2.1",
+        "scope": null,
+        "escapedName": "signalr",
+        "name": "signalr",
+        "rawSpec": "^2.2.1",
+        "spec": ">=2.2.1 <3.0.0",
+        "type": "range"
+      },
+      "C:\\JnJ\\Projects\\git\\ticket-system\\client"
+    ]
+  ],
+  "_from": "signalr@>=2.2.1 <3.0.0",
+  "_id": "signalr@2.2.1",
+  "_inCache": true,
+  "_location": "/signalr",
+  "_nodeVersion": "6.2.2",
+  "_npmOperationalInternal": {
+    "host": "packages-16-east.internal.npmjs.com",
+    "tmp": "tmp/signalr-2.2.1.tgz_1469455553587_0.07749593793414533"
+  },
+  "_npmUser": {
+    "name": "guido_ffm",
+    "email": "guido_ffm@hotmail.de"
+  },
+  "_npmVersion": "3.10.2",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "signalr@^2.2.1",
+    "scope": null,
+    "escapedName": "signalr",
+    "name": "signalr",
+    "rawSpec": "^2.2.1",
+    "spec": ">=2.2.1 <3.0.0",
+    "type": "range"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/signalr/-/signalr-2.2.1.tgz",
+  "_shasum": "61123440fda2a9ad7bf7dfca1e1af67853c1dd2c",
+  "_shrinkwrap": null,
+  "_spec": "signalr@^2.2.1",
+  "_where": "C:\\JnJ\\Projects\\git\\ticket-system\\client",
+  "authors": [
+    "Microsoft"
+  ],
+  "dependencies": {
+    "jquery": ">=1.6.4"
+  },
+  "description": "Microsoft ASP.NET SignalR JavaScript Client",
+  "devDependencies": {},
+  "directories": {},
+  "dist": {
+    "shasum": "61123440fda2a9ad7bf7dfca1e1af67853c1dd2c",
+    "tarball": "https://registry.npmjs.org/signalr/-/signalr-2.2.1.tgz"
+  },
+  "gitHead": "fe48b045bc10669523f25894ee6fdde826c3bde6",
+  "homepage": "http://www.asp.net/signalr",
+  "keywords": [
+    "signalr",
+    "microsoft",
+    "asp.net",
+    "javascript",
+    "jquery",
+    "realtime"
+  ],
+  "license": "http://www.microsoft.com/web/webpi/eula/signalr_client_enu.htm",
+  "main": "./jquery.signalR.js",
+  "maintainers": [
+    {
+      "name": "guido_ffm",
+      "email": "guido_ffm@hotmail.de"
+    }
+  ],
+  "name": "signalr",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "scripts": {},
+  "version": "2.2.1"
+}

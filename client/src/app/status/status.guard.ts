@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, CanDeactivate } from '@angular/router';
 
+//components
 import {StatusDetailComponent} from './detail/status.detail.component';
 
 

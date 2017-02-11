@@ -1,0 +1,13 @@
+<!--<md-card class="app-card card-error">-->
+<md-card [class]="messageClass">
+  <md-card-content>
+    <md-grid-list cols="6" rowHeight="100px">
+      <md-grid-tile col="6" row="1">
+        <md-icon> {{data.messageIcon}}</md-icon>
+      </md-grid-tile>
+      <md-grid-tile col="5" row="1">
+        <span md-grid-tile> {{data.messageText}} </span>
+      </md-grid-tile>
+    </md-grid-list>
+  </md-card-content>
+</md-card>

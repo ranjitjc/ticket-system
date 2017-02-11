@@ -4,19 +4,34 @@ import { RouterModule} from '@angular/router';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MaterialModule } from '@angular/material';
 
+//services
+import { StatusService } from '../services/status.service';
+
+//guards
+import { StatusGuard , StatusEditGuard } from './status.guard'
+
+//widgets
+import { MessageModule } from '../shared/message/message.module'
+
+//models
+import { MessageType, TicketStatus } from '../model/models'
+
+//components
 import { StatusComponent } from './status.component';
 import { StatusDetailComponent } from './detail/status.detail.component';
 
-import { StatusGuard , StatusEditGuard } from './status.guard'
-import { StatusService, TicketStatus } from '../services/status.service';
+import { SharedModule } from '../shared/shared.module';
+
+
 
 @NgModule({
   imports: [
-    //SharedModule,
+    SharedModule,
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
     MaterialModule.forRoot(),
+    MessageModule,
     //InMemoryWebApiModule.forRoot(ProductData),
     RouterModule.forChild([
       { path: 'status', component: StatusComponent },
@@ -32,7 +47,9 @@ import { StatusService, TicketStatus } from '../services/status.service';
     StatusDetailComponent,
     //ProductEditComponent,
     //ProductFilterPipe
+    //MessageCard,
   ],
+  
   providers: [
     StatusService,
     StatusGuard,
@@ -40,3 +57,4 @@ import { StatusService, TicketStatus } from '../services/status.service';
   ]
 })
 export class StatusModule {}
+

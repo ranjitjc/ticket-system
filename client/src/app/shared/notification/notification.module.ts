@@ -4,7 +4,8 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import {ReversePipe } from '../pipes/reverse'
-import { NotificationDialog }   from './notification.component';
+//import {FilterTypePipe } from '../pipes/filterType'
+import { NotificationDialog , FilterTypePipe}   from './notification.component';
 
 @NgModule({
     imports: [
@@ -16,7 +17,8 @@ import { NotificationDialog }   from './notification.component';
     ],
     declarations: [
         NotificationDialog,
-        ReversePipe
+        ReversePipe,
+        FilterTypePipe
     ],
     providers: [
         NotificationService,

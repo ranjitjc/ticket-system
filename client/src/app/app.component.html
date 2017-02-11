@@ -67,7 +67,7 @@
 
        <button md-icon-button [class.m2app-dark]="isDarkTheme"
             (click)="openNotification()">
-         <md-icon class="md-12">notifications</md-icon>
+         <md-icon class="md-12">{{notificationIcon}}</md-icon>
       </button>
       <button md-icon-button [md-menu-trigger-for]="menu">
          <md-icon class="md-12">settings_applications</md-icon>
@@ -82,6 +82,10 @@
         <md-icon>dialpad</md-icon>
         <span>Settings</span>
       </button>
+      <md-slide-toggle
+          class="example-margin">
+        Notification
+      </md-slide-toggle>
     </md-menu>
 
 
@@ -94,5 +98,5 @@
 </md-sidenav-layout>
 
 <span class="app-action" [class.m2app-dark]="isDarkTheme">
-  <button md-fab [routerLink]="['/ticket']"><md-icon>add</md-icon></button>
+  <button md-fab [routerLink]="['/ticket/0']"><md-icon>add</md-icon></button>
 </span>

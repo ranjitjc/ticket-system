@@ -22,8 +22,7 @@
         "app-theme.scss"
       ],
       "scripts": [
-        "../node_modules/lodash/lodash.js",
-        "assets/bower_components/webcomponentsjs/webcomponents.min.js"
+        "../node_modules/lodash/lodash.js"
       ],
       "environments": {
         "source": "environments/environment.ts",
