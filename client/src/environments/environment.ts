@@ -5,5 +5,6 @@
 
 export const environment = {
   production: false,
-  apiURL : 'http://localhost:5000/api/'
+  realTimeURL : 'http://localhost:5501/signalr',
+  apiURL : 'http://localhost:5501/api/'
 };

@@ -3,35 +3,38 @@ import { FormBuilder, FormGroup, FormControl, FormArray, Validators, FormControl
 import { Router, ActivatedRoute } from '@angular/router';
 import {MdSnackBar, MdSnackBarConfig} from '@angular/material';
 import {MdDialog, MdDialogRef, MdDialogConfig} from '@angular/material';
-import { ConfirmationService } from '../../shared/confirmation/confirmation.service'
-
-import { StatusService, TicketStatus } from '../../services/status.service';
-
-import {NotificationService, Notification} from '../../shared/notification/notification.service';
-
-
 import { Observable, BehaviorSubject } from 'rxjs/Rx';
 import { Subscription }       from 'rxjs/Subscription';
 
-import { NumberValidators } from '../../shared/number.validator';
-import { GenericValidator } from '../../shared/generic.validator';
+
+//services
+import { StatusService } from '../../services/status.service';
+
+//models
+import { MessageModel, MessageType , TicketStatus, Notification, NotificationType} from '../../model/models'
+
+//shared
+import { NumberValidators, GenericValidator, ConfirmationService , NotificationService } from '../../shared/shared.module';
+
 
 
 @Component({
   selector: 'app-status-detail',
   templateUrl: './status.detail.component.html',
-  styleUrls: ['./status.detail.component.scss']
+  styleUrls: ['./status.detail.component.scss'],
 })
 export class StatusDetailComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @ViewChildren(FormControlName, { read: ElementRef }) formInputElements: ElementRef[];
   isLoading:Boolean;
   isSaving:Boolean;
+  isError:Boolean =false;
   ticketStatus: TicketStatus;
   private sub: Subscription;
   ticketStatusForm: FormGroup;
   SortOrders : number[];
   errorMessage:any;
+  message:MessageModel;
   pageTitle:string;
   totalCount : number;
 
@@ -41,7 +44,7 @@ export class StatusDetailComponent implements OnInit, AfterViewInit, OnDestroy {
   private genericValidator: GenericValidator;
 
   //snackBar variables
-  message: string = 'Snack Bar opened.';
+  //snakMessage: string = 'Snack Bar opened.';
   actionButtonLabel: string = 'Retry';
   action: boolean = false;
   setAutoHide: boolean = true;
@@ -66,6 +69,7 @@ export class StatusDetailComponent implements OnInit, AfterViewInit, OnDestroy {
             maxlength: 'Status cannot exceed 50 characters.'
         },
         sortOrder: {
+            required: 'Status is required.',
             range: 'Rate the product between 1 (lowest) and 5 (highest).'
         }
     };
@@ -104,11 +108,14 @@ export class StatusDetailComponent implements OnInit, AfterViewInit, OnDestroy {
                         Validators.maxLength(50)]
                   ],
           //sortOrder: ['', NumberValidators.range(1, 5)],
-          sortOrder: '',
+          sortOrder: ['',[Validators.required]],
           isDefault : 0
         });
         
-        
+        //Testing 
+        // this.message = {messageType : MessageType.INFO,
+        //                 messageIcon:"warning",
+        //                 messageText : "From Parent"};
     }
 
   ngAfterViewInit(): void {
@@ -128,6 +135,7 @@ export class StatusDetailComponent implements OnInit, AfterViewInit, OnDestroy {
 
     notify(action, message){
       let notify : Notification = {
+        type :NotificationType.LOG,
         action : action,
         component : "StatusDetailComponent",
         message : message,
@@ -186,6 +194,7 @@ export class StatusDetailComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.ticketStatusForm.dirty && this.ticketStatusForm.valid) {
       let status = Object.assign({}, this.ticketStatus, this.ticketStatusForm.value);
       //TODO:call service to detele the current TicketStatus
+      this.isError=false;
       this.isSaving= true;
       let msg = `New TicketStatus [${status.name}] has been created.`;
       if (status.id > 0){
@@ -204,7 +213,10 @@ export class StatusDetailComponent implements OnInit, AfterViewInit, OnDestroy {
               this.isSaving= false;
           },
           (error:any) => {
-            this.errorMessage = <any>error;
+            this.message = {messageType : MessageType.ERROR,
+                        messageIcon:"error",
+                        messageText : <any>error};
+            this.isError=true;
             this.isSaving= false;
           }
       )

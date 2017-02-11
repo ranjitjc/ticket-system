@@ -1,30 +1,40 @@
 import { Injectable } from '@angular/core';
-import {Http, Headers, RequestOptions, Response, HttpModule} from '@angular/http';
+import { Http, Headers, RequestOptions, Response, HttpModule } from '@angular/http';
 import { Observable, BehaviorSubject } from 'rxjs/Rx';
 import 'rxjs/add/operator/toPromise';
 
-import { environment } from '../../environments/environment';
+import { CurrentUser, Ticket } from '../model/models'
 
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class AuthenticationService {
-    constructor(private _http: Http) { 
-        this._loggedInUser = <BehaviorSubject<CurrentUser>> new BehaviorSubject({});
+    constructor(private _http: Http) {
+        this.baseUrl = environment.apiURL + 'account';
+        this.currentUser = this.getCurrentUser()
+        if (this.currentUser){
+            let headers = new Headers({ 'Authorization': 'Bearer ' + this.currentUser.accessToken });
+            this.options = new RequestOptions({ headers: headers });
+        }
+        this._loggedInUser = <BehaviorSubject<CurrentUser>>new BehaviorSubject({});
         this.LoggedInUser = this._loggedInUser.asObservable();
     }
 
-    LoggedInUser : Observable<CurrentUser>;
-     _loggedInUser : BehaviorSubject<CurrentUser>
+    baseUrl:string;
+    currentUser: CurrentUser;
+    options:RequestOptions;
+    LoggedInUser: Observable<CurrentUser>;
+    _loggedInUser: BehaviorSubject<CurrentUser>
 
     loginWin(event, username, password) {
         event.preventDefault();
 
-        let url =  environment.apiURL + "login";
+        let url = environment.apiURL + "login";
 
         let body = "username=" + username + "&password=" + password + "&grant_type=password";
         let headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
-        let options = new RequestOptions({ headers: headers });        
-         
+        let options = new RequestOptions({ headers: headers });
+
         this._http.post(url, body, options).subscribe(
             response => {
                 localStorage.setItem('access_token', response.json().access_token);
@@ -38,15 +48,13 @@ export class AuthenticationService {
                 console.log(error.text());
             }
         );
-    }    
+    }
 
     //login(username: string, password: string): Promise<CurrentUser> {
     login(): Observable<CurrentUser> {
 
-        let url =  environment.apiURL + "account";
-
         // return false to indicate failed login
-            localStorage.removeItem('currentUser');
+        localStorage.removeItem('currentUser');
         /*
         let body = "username=" + username + "&password=" + password + "&grant_type=password";
         body = JSON.stringify({ username: username, password: password });
@@ -54,28 +62,28 @@ export class AuthenticationService {
         let options = new RequestOptions({ headers: headers });       
         return this._http.post(url, body, options) 
         */
-        return this._http.get(url) 
+        return this._http.get(this.baseUrl)
             //.toPromise()
             .map(response => this.extractArray(response))
             .catch(this.handleError);
-    }    
+    }
 
     loginFormAuth(username: string, password: string): Promise<CurrentUser> {
 
-        let url =  environment.apiURL + "/security";
-        
+        let url = environment.apiURL + "/security";
+
         let body = "username=" + username + "&password=" + password + "&grant_type=password";
         body = JSON.stringify({ username: username, password: password });
         let headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
-        let options = new RequestOptions({ headers: headers });       
-        return this._http.post(url, body, options) 
+        let options = new RequestOptions({ headers: headers });
+        return this._http.post(url, body, options)
             .toPromise()
             .then(response => this.extractArray(response))
             .catch(this.handleErrorPromise);
-    } 
+    }
 
     protected extractArray(res: Response, showprogress: boolean = true) {
-        let user : CurrentUser = res.json() || {};
+        let user: CurrentUser = res.json() || {};
         // login successful if there's a jwt token in the response
         let token = user && user.accessToken;
         if (token) {
@@ -83,17 +91,28 @@ export class AuthenticationService {
             // console.log( this._loggedInUser.observers.forEach(
             //      a => a.next(user))
             //      );
-            this._loggedInUser.next( user );
+
             // store username and jwt token in local storage to keep user logged in between page refreshes
             localStorage.setItem('currentUser', JSON.stringify({ user }));
 
-            // return true to indicate successful login
+            this._loggedInUser.next(user);
             
+
+            // return true to indicate successful login
+
         } else {
             // return false to indicate failed login
             localStorage.removeItem('currentUser');
         }
         return user;
+    }
+
+    public getCurrentUser() {
+        if (localStorage.getItem('currentUser')){
+        return <CurrentUser>(JSON.parse(localStorage.getItem('currentUser')).user);
+        }else {
+            return null;
+        }
     }
 
 
@@ -141,12 +160,4 @@ export class AuthenticationService {
         //this.token = null;
         localStorage.removeItem('currentUser');
     }
-}
-export interface CurrentUser {
-    userName :string;
-    fullName: string;
-    isAdmin: boolean;
-    accessToken:string;
-    expiresIn: Date;
-    tokenType :string;
 }

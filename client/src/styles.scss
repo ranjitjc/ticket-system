@@ -4,29 +4,29 @@ body {
   margin: 0;
 }
 
-.app-div {
-//   display: flex;
-//   flex-flow: row wrap;
+// .app-div {
+// //   display: flex;
+// //   flex-flow: row wrap;
 
-  md-list, md-nav-list {
-    // border: 1px solid rgba(0, 0, 0, 0.12);
-    width: 100%;
-    margin: 0 0 0 0;
+//   md-list, md-nav-list {
+//     // border: 1px solid rgba(0, 0, 0, 0.12);
+//     width: 100%;
+//     margin: 0 0 0 0;
 
-  }
-  h2 {
-    margin-top: 20px;
-  }
+//   }
+//   h2 {
+//     margin-top: 20px;
+//   }
 
-  md-icon {
-    color: rgba(0, 0, 0, 0.12);
-  }
+//   md-icon {
+//     color: rgba(0, 0, 0, 0.12);
+//   }
 
-  [md-list-icon] {
-    color: white;
-    background: rgba(0, 0, 0, 0.3);
-  }
-}
+//   [md-list-icon] {
+//     color: white;
+//     background: rgba(0, 0, 0, 0.3);
+//   }
+// }
 
 .card-basic {
   padding: 0;
@@ -71,4 +71,50 @@ md-progress-spinner{
 
 .error md-icon svg {
   fill: red;
+}
+
+.message-card{
+    margin: 16px;
+}
+.message-card md-icon {
+  font-size: 50px;
+  height: 50px;
+}
+
+.message-card md-grid-tile {
+  
+  figure {
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+
+.card-info {
+  padding: 0;
+  color: darkblue;
+  background-color: deepskyblue;
+  border: darkblue 1px solid;
+}
+
+.card-warn {
+  padding: 0;
+  color:orange;
+  background-color: lightcoral;
+  border: orange 1px solid;
+}
+
+
+.card-error {
+  padding: 0;
+  color: red;
+  background-color: lavenderblush;
+  border: red 1px solid;
+}
+
+.containerX {
+  // border: solid 1px #b6b6b6;
+  // margin-top: 14px;
+  // margin-bottom: 14px;
+  box-sizing: content-box !important;
 }

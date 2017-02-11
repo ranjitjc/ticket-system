@@ -8,9 +8,52 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  
+
+  <script src="/lib/jquery/dist/jquery.js"></script>
+  <script src="/lib/signalr/jquery.signalR.js"></script>
+
 </head>
 <body>
   <app-root>Loading...</app-root>
 </body>
+<!--<script type="text/javascript">
+      $.getScript('/lib/signalr/jquery.signalR.js', function () {
+          $.getScript('http://localhost:5501/signalr/hubs', function () {
+              $.connection.hub.url = 'http://localhost:5501/signalr';
+              var myHub = $.connection.chat;
+
+              myHub.client.newMessage = function(message) {
+                  console.warn('New Message from Server :' + message);
+              }
+
+              $.connection.hub.start().done(function () {
+                  myHub.server.sendMessage("Hello from Client!!!");
+              });
+          });
+      });
+  </script>-->
+<script>
+  jQuery.support.cors = true; //force cross-site scripting
+</script>
+
+<!--<script type="text/javascript">
+    var chat = $.connection.chat;
+
+    chat.client.sendMessage = function (text) {
+        alert(text);
+    };
+
+    $.connection.hub.start()
+    .done(response => 
+      {
+        chat.server.broadcast('hello from client');
+        console.log('SignalR Connected.');
+        this.setConnectionState(SignalRConnectionStatus.Connected)
+      }
+    ).fail(error => {
+      console.log('SignalR errored!');
+      this.connectionStateSubject.error(error);
+      }
+    );
+</script>-->
 </html>

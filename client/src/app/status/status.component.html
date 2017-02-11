@@ -2,10 +2,10 @@
   <md-card class="app-card card-basic status-card">
     <md-toolbar color="primary">Status
       <span class="app-toolbar-filler"></span>
-      <a md-icon-button color="accent" [class.m2app-dark]="isDarkTheme"
+      <a md-icon-button [class.m2app-dark]="isDarkTheme"
          [routerLink]="['/status', 0]"
          [queryParams] = "{count: totalCount}">
-         <md-icon class="md-12">add</md-icon>
+         <md-icon>add</md-icon>
       </a>
     </md-toolbar>
     <md-card-content>
@@ -14,15 +14,15 @@
                 <div *ngIf="isLoading">
                 <span align="left"><md-progress-spinner  mode="indeterminate" ></md-progress-spinner> Loading...</span>
                 </div>
-                <md-card class="error-card" *ngIf="isError">
+                <!--<md-card class="error-card" *ngIf="isError">
                   <md-card-content>
                     <md-icon class="error-icon">report_problem</md-icon>
                     <span class="error-msg">{{ErrorMessage }}</span>
                   </md-card-content>
-                </md-card>
+                </md-card>-->
             <!--</md-grid-tile>
         </md-grid-list>-->
-        <md-nav-list>
+        <md-nav-list class="status" md-ink-ripple>
           <a md-list-item *ngFor="let status of statuses"
             [routerLink]="['/status', status.id]"
             [queryParams] = "{count: totalCount}">
@@ -35,3 +35,4 @@
       <md-progress-bar mode="indeterminate" *ngIf="isLoading"></md-progress-bar>
     </md-card-footer>
   </md-card>
+  <message-card [data]="message" *ngIf="isError" ></message-card>

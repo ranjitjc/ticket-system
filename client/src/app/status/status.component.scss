@@ -21,3 +21,43 @@ md-progress-spinner{
 .addStatus{
     width: auto;
 }
+
+md-list-item{
+    height: 20px;
+}
+
+.md-list-item{
+    height: 20px;
+}
+
+// md-nav-list a[md-list-item] .md-list-item {
+//     min-height: 20px;
+//     height: 25px;
+// }
+
+// md-list a[md-list-item] , 
+//    md-list md-list-item, 
+//    md-nav-list a[md-list-item], 
+//    md-nav-list md-list-item {
+//     min-height: 20px;
+//     height: 25px;
+// }
+
+// md-list a[md-list-item] .md-list-item, 
+//    md-list md-list-item .md-list-item, 
+//    md-nav-list a[md-list-item] .md-list-item, 
+//    md-nav-list md-list-item .md-list-item{
+//     min-height: 20px;
+//     height: 25px;
+// }
+
+// md-list-item, md-list-item .md-list-item-inner, a {
+//    min-height: 20px;
+//     height: 25px;
+// }
+
+// md-list-item, md-list-item .md-list-item, a{
+// min-height: 20px;
+//     height: 25px;
+    
+// }

@@ -4,8 +4,12 @@
 
 @include md-core();
 
-$primary: md-palette($md-deep-purple);
-$accent:  md-palette($md-amber, A200, A100, A400);
+// $primary: md-palette($md-deep-purple);
+// $accent:  md-palette($md-amber, A200, A100, A400);
+
+$primary: md-palette($md-cyan);
+$accent:  md-palette($md-purple, A200, A100, A400);
+
 
 $theme: md-light-theme($primary, $accent);
 
@@ -20,3 +24,5 @@ $theme: md-light-theme($primary, $accent);
 
   @include angular-material-theme($dark-theme);
 }
+
+

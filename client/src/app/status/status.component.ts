@@ -1,8 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { StatusService, TicketStatus } from '../services/status.service';
+import { StatusService } from '../services/status.service';
 import { Observable, BehaviorSubject } from 'rxjs/Rx';
 
-import {NotificationService, Notification} from '../shared/notification/notification.service';
+//notifications
+import {NotificationService} from '../shared/notification/notification.service';
+
+//models
+import { MessageModel, MessageType , TicketStatus, Notification, NotificationType} from '../model/models'
+
 
 @Component({
   selector: 'app-status',
@@ -15,7 +20,8 @@ import {NotificationService, Notification} from '../shared/notification/notifica
 export class StatusComponent extends OnInit {
     isLoading:Boolean;
     isError:Boolean;
-    ErrorMessage:string;
+    //ErrorMessage:string;
+    message:MessageModel;
     statuses: TicketStatus[] = [];
     totalCount : Number;
 
@@ -33,9 +39,12 @@ export class StatusComponent extends OnInit {
             this.totalCount = data.length;
             this.isLoading= false;
             },
-            err => {
-                console.error("StatusComponent.ngOnit :" + err);
-                this.ErrorMessage = err;
+            error => {
+                console.error("StatusComponent.ngOnit :" + error);
+                this.message = {messageType : MessageType.ERROR,
+                        messageIcon:"error",
+                        messageText : <any>error};
+                //this.ErrorMessage = error;
                 this.isLoading = false;
                 this.isError = true;
             }
