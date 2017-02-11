@@ -1,0 +1,22 @@
+.d3-chart {
+  width: 100%;
+  height: 300px;
+}
+
+.d3-chart .axis path,
+.d3-chart .axis line {
+  stroke: #999;
+}
+
+.d3-chart .axis text {
+  fill: #999;
+}
+
+/*New d3 styles*/
+
+rect {
+      fill: #673ab7;
+    }
+    rect:hover {
+      fill: #601aa1;
+    }
