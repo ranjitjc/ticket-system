@@ -1,34 +1,90 @@
-<div class="app-div" *ngIf="LoggedInState | async">
+<div class="app-div1" *ngIf="LoggedInState | async">
 
-  <md-card class="app-card card-basic">
-    <md-toolbar color="primary">My Tickets</md-toolbar>
-    <md-card-content>
-        <md-nav-list>
-          <a md-list-item *ngFor="let ticket of myTickets" href="ticket?Id={{ ticket.Id }}">
-            <md-icon md-list-icon>folder</md-icon>
-            <span md-line>{{ ticket.subject }}</span>
-            <span md-line class="demo-secondary-text"> {{ ticket.message }} </span>
-          </a>
-        </md-nav-list>
-    </md-card-content>
-  </md-card>
+  <div *ngIf="!isError">
 
-  <md-card class="app-card card-basic">
-    <md-toolbar color="primary">Assigned Tickets</md-toolbar>
-    <md-card-content>
-      <md-nav-list>
-        <a md-list-item *ngFor="let ticket of assignedTickets" href="ticket?Id={{ ticket.Id }}">
-          <md-icon md-list-icon>folder</md-icon>
-          <span md-line>{{ ticket.subject }}</span>
-          <span md-line class="app-secondary-text"> {{ ticket.message }} </span>
-        </a>
-      </md-nav-list>
-    </md-card-content>
-  </md-card>
+    <md-grid-list cols="2" ratio="4:1" gutterSize="5px">
+      <md-grid-tile cols="1" row="1">
+        <md-card class="app-card card-basic status-card">
+          <md-toolbar color="primary">Reported Tickets</md-toolbar>
+          <md-card-content>
+          <d3-barchart *ngIf="reportedChartData" [data]="reportedChartData"></d3-barchart>
+          </md-card-content>
+          <md-card-footer>
+            <md-progress-bar mode="indeterminate" *ngIf="!reportedChartData"></md-progress-bar>
+          </md-card-footer>
+        </md-card>
+      </md-grid-tile>
+      <md-grid-tile cols="2" row="1">
+        <md-card class="app-card card-basic status-card">
+          <md-toolbar color="primary">Assigned Tickets</md-toolbar>
+          <md-card-content>
+          <d3-barchart *ngIf="assignedChartData" [data]="assignedChartData"></d3-barchart>
+          </md-card-content>
+          <md-card-footer>
+            <md-progress-bar mode="indeterminate" *ngIf="!assignedChartData"></md-progress-bar>
+          </md-card-footer>
+        </md-card>
+      </md-grid-tile>
 
+      <md-grid-tile cols="1" row="2">
+
+        <md-card class="app-card card-basic status-card">
+          <md-toolbar color="primary">Recent Reported Tickets
+
+            <span class="app-toolbar-filler"></span>
+            <a md-icon-button [class.m2app-dark]="isDarkTheme" [routerLink]="['/ticket']">
+              <md-icon class="md-12">more_horiz</md-icon>
+            </a>
+            <a md-icon-button [class.m2app-dark]="isDarkTheme">
+              <md-icon class="md-12">refresh</md-icon>
+            </a>
+          </md-toolbar>
+          <md-card-content>
+
+            <md-nav-list>
+              <a md-list-item *ngFor="let ticket of reportedTickets" [routerLink]="['/ticket', ticket.id]">
+                <md-icon md-list-icon>assignment</md-icon>
+                <span md-line>{{ ticket.lastUpdatedDate  | date: 'dd/MMM/yyyy hh:mm:ss'}}</span>
+                <span md-line class="demo-secondary-text"> {{ ticket.description | truncate :50 }} </span>
+              </a>
+            </md-nav-list>
+
+          </md-card-content>
+          <md-card-footer>
+            <md-progress-bar mode="indeterminate" *ngIf="!reportedTickets"></md-progress-bar>
+          </md-card-footer>
+        </md-card>
+      </md-grid-tile>
+      <md-grid-tile cols="2" row="2">
+        <md-card class="app-card card-basic status-card">
+          <md-toolbar color="primary">Recent Assigned Tickets
+            <span class="app-toolbar-filler"></span>
+            <a md-icon-button [class.m2app-dark]="isDarkTheme" [routerLink]="['/ticket']">
+              <md-icon class="md-12">more_horiz</md-icon>
+            </a>
+            <a md-icon-button  [class.m2app-dark]="isDarkTheme">
+              <md-icon class="md-12">refresh</md-icon>
+            </a>
+          </md-toolbar>
+          <md-card-content>
+            <md-nav-list>
+              <a md-list-item *ngFor="let ticket of assignedTickets" href="ticket/{{ ticket.id }}">
+                <md-icon md-list-icon>assignment</md-icon>
+                <span md-line>{{ ticket.lastUpdatedDate   | date: 'dd/MMM/yyyy hh:mm:ss'}}</span>
+                <span md-line class="app-secondary-text"> {{ ticket.description | truncate :50 }} </span>
+              </a>
+            </md-nav-list>
+          </md-card-content>
+          <md-card-footer>
+            <md-progress-bar mode="indeterminate" *ngIf="!assignedTickets"></md-progress-bar>
+          </md-card-footer>
+        </md-card>
+      </md-grid-tile>
+    </md-grid-list>
+  </div>
 </div>
 
-
+<div style="display: none">
 <md-card class="app-card card-basic" *ngIf="LoggedInState | async">
   <md-toolbar color="primary">Login Parameters</md-toolbar>
   <md-card-content>
@@ -36,7 +92,7 @@
     <p>FullName:<b>{{ currentUser?.user.fullName}}</b></p>
   </md-card-content>
 </md-card>
-
+</div>
 
 <md-card class="app-card card-basic" *ngIf="LoggedInErrorState | async">
   <md-toolbar color="primary">Authorization</md-toolbar>
@@ -44,5 +100,6 @@
     <p>Your are not authrized to use the Ticket System.Please contact helpdesk.</p>
   </md-card-content>
 </md-card>
-{{LoggedInState | async}}
-{{LoggedInErrorState | async}}
+<div style="display: none"> {{LoggedInState | async}} {{LoggedInErrorState | async}}
+</div>
+<message-card [data]="message" *ngIf="!isError" ></message-card>

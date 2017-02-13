@@ -18,11 +18,10 @@ const routes: Routes = [
   { path: '', component: HomeComponent},
   //{ path: '', component: HomeComponent , canActivate: [AuthGuard]},
   //{ path: 'login', component: LoginComponent},
-  { path: 'ticket', component: TicketComponent },
+  { path: 'tickets', component: TicketComponent },
   { path: 'search', component: SearchComponent },
   { path: 'status', component: StatusComponent },
   { path: 'category', component: CategoryComponent },
-//   { path: 'about/:id', component: AboutComponent },
   { path: 'about', component: AboutComponent },
   //{ path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
   { path: 'material', component: MaterialComponent }
