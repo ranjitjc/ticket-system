@@ -1,27 +1,91 @@
-<md-card class="app-card card-basic">
-  <md-toolbar color="primary">Ticket</md-toolbar>
-  <md-card-content>
-    <form>
-      <md-input class="demo-full-width" placeholder="Company (disabled)" disabled value="Google">
-      </md-input>
+<div *ngIf="!isError">
+  <md-card class="app-card card-basic card-table">
+    <md-toolbar color="primary">Tickets
 
-      <table style="width: 100%" cellspacing="0"><tr>
-        <td><md-input placeholder="First name" style="width: 100%"></md-input></td>
-        <td><md-input placeholder="Long Last Name That Will Be Truncated" style="width: 100%"></md-input></td>
-      </tr></table>
-      <p>
-        <md-textarea class="demo-full-width" placeholder="Address" value="1600 Amphitheatre Pkway"></md-textarea>
-        <md-textarea class="demo-full-width" placeholder="Address 2"></md-textarea>
-      </p>
-      <table style="width: 100%" cellspacing="0"><tr>
-        <td><md-input class="demo-full-width" placeholder="City" value="Mountain View"></md-input></td>
-        <td><md-input class="demo-full-width" placeholder="State" maxlength="2" value="CA"></md-input></td>
-        <td><md-input #postalCode class="demo-full-width" maxlength="5"
-                      placeholder="Postal Code"
-                      value="94043">
-          <md-hint align="end">{{postalCode.characterCount}} / 5</md-hint>
-        </md-input></td>
-      </tr></table>
-    </form>
-  </md-card-content>
-</md-card>
+      <span class="app-toolbar-filler"></span>
+      <a md-icon-button [class.m2app-dark]="isDarkTheme">
+        <md-icon class="md-12">refresh</md-icon>
+      </a>
+    </md-toolbar>
+    <md-card-content>
+      <div>
+        <!--<ngx-datatable
+        class="material"
+        [rows]="rows"
+        [columnMode]="'force'"
+        [headerHeight]="50"
+        [footerHeight]="50"
+        [rowHeight]="'auto'"
+        [externalPaging]="true"
+        [count]="count"
+        [offset]="offset"
+        [limit]="limit"
+        (page)='onPage($event)'>
+        <ngx-datatable-column name="id" [width]="140"></ngx-datatable-column>
+        <ngx-datatable-column name="lastUpdatedDate"></ngx-datatable-column>
+        <ngx-datatable-column name="description" [width]="300"></ngx-datatable-column>
+        <ngx-datatable-column name="reportedUserName" ></ngx-datatable-column>
+        <ngx-datatable-column name="assignedUserName" ></ngx-datatable-column>
+      </ngx-datatable>
+-->
+
+
+        <ngx-datatable class="material" [columnMode]="'flex'" [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'" 
+          [rows]="rows" [externalPaging]="true" [externalSorting]="true" [loadingIndicator]="loading"
+          [count]="count" [offset]="offset" [limit]="limit" (page)='onPage($event)' (sort)="onSort($event)" 
+          [selected]="selected"
+          [selectionType]="'single'"
+          (activate)="onActivate($event)"
+          (select)='onSelect($event)'>
+          <ngx-datatable-column name="ID" [flexGrow]="1">
+            <template let-value="value" ngx-datatable-cell-template>
+              {{value}}
+            </template>
+          </ngx-datatable-column>
+          <ngx-datatable-column name="lastUpdatedDate" [flexGrow]="1">
+            <template let-row="row" let-value="value" ngx-datatable-cell-template>
+              {{value}}
+            </template>
+          </ngx-datatable-column>
+          <ngx-datatable-column name="Description" [flexGrow]="3">
+            <template let-row="row" let-value="value" ngx-datatable-cell-template>
+              {{value}}
+            </template>
+          </ngx-datatable-column>
+          <ngx-datatable-column name="reportedUserName" [flexGrow]="1">
+            <template let-value="value" ngx-datatable-cell-template>
+              {{value}}
+            </template>
+          </ngx-datatable-column>
+          <ngx-datatable-column name="assignedUserName" [flexGrow]="1">
+            <template let-value="value" ngx-datatable-cell-template>
+              {{value}}
+            </template>
+          </ngx-datatable-column>
+        </ngx-datatable>
+
+
+        <!--<ngx-datatable
+        class="material"
+        [rows]="rows"
+        [columnMode]="'force'"
+        [headerHeight]="50"
+        [footerHeight]="0"
+        [rowHeight]="50"
+        [scrollbarV]="true"
+        [scrollbarH]="true">
+        <ngx-datatable-column name="id" [width]="300"></ngx-datatable-column>
+        <ngx-datatable-column name="lastUpdatedDate"></ngx-datatable-column>
+        <ngx-datatable-column name="description"></ngx-datatable-column>
+        <ngx-datatable-column name="reportedUserName" [width]="300"></ngx-datatable-column>
+        <ngx-datatable-column name="assignedUserName" [width]="300" ></ngx-datatable-column>
+      </ngx-datatable>-->
+      </div>
+
+
+    </md-card-content>
+    <md-card-footer>
+      <md-progress-bar mode="indeterminate" *ngIf="isReportedTicketsLoading"></md-progress-bar>
+    </md-card-footer>
+  </md-card>
+</div>

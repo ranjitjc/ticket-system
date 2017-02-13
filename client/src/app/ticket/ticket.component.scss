@@ -1,0 +1,416 @@
+// @import "../ng2-material/style/variables";
+// @import "../ng2-material/style/default-theme";
+// //$import "../../../ng2-material/components/whiteframe/whiteframe";
+
+// pagination-split-usage {
+//   .page-container {
+//     position: relative;
+//     align-items: stretch;
+//   }
+
+//   md-card {
+//     margin: 0;
+
+//     md-card-content {
+//       padding: 30px 30px 40px;
+//     }
+//   }
+
+//   .controls {
+//     position: absolute;
+//     top: 0;
+//     right: 0;
+//     bottom: 0;
+//     left: 0;
+
+//     .md-pagination-control {
+//       position: absolute;
+//       top: 0;
+//       bottom: 0;
+//       margin: auto;
+//       width: 35px;
+//       height: 35px;
+//       vertical-align: middle;
+//     }
+
+//     .md-pagination-control-previous {
+//       left: 0;
+//     }
+
+//     .md-pagination-control-next {
+//       right: 0;
+//     }
+
+//     .material-icons {
+//       //$extend .md-whiteframe-1dp;
+//       width: 35px;
+//       height: 35px;
+//       background: #FFF;
+//     }
+//   }
+
+//   .md-pagination-range {
+//     position: absolute;
+//     right: 0;
+//     bottom: 20px;
+//     left: 0;
+//   }
+
+//   .page-number {
+//     padding: 0 10px;
+//     font-weight: bold;
+//   }
+// }
+
+// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// // .table {
+// //   margin: 0;
+// //   display: flex;
+// //   font-family: 'Open Sans', sans-serif;
+// //   margin: 0;
+// //   color: #eec965;
+// // }
+
+// // .colum {
+// //   background: #dd5f40;
+// //   flex-basis: 0;
+  
+// //     /* flex-grow: 1;
+// //        flex-shrink: 1;
+// //        flex-basis: 0;
+// //     */
+// // }
+
+// // .title-2 {
+// //   background: #3d483a;
+// //   flex: 20px;
+// //     /* flex-grow: 1;
+// //        flex-shrink: 1;
+// //        flex-basis: 20px;
+// //     */
+// // }
+
+// // .title-3 {
+// //   background: #468e5d;
+// //   flex: 0 80px;
+// //     /* flex-grow: 0;
+// //        flex-shrink: 1;
+// //        flex-basis: 80px;
+// //     */
+// // }
+
+// // .row {
+// //   flex: 1;
+// // }
+// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// /*
+//  * Define the widths: play around with these 
+//  * to get a best fit.
+//  */
+// $index-width: 25px;
+// $title-width: 220px;
+// $comment-width: 120px;
+// $module-width: 110px;
+// $reporter-width: 85px;
+// $status-width: 95px;
+// $owner-width: 75px;
+// $severity-width: 80px;
+// $icon-width: 18px;
+// $date-width: 110px;
+// $margin-width: 30px;
+
+// /*
+//  * Basic styles, good for a large display. Everything fits in
+//  * one row, no wrapping. All text based cells grow equally.
+//  */
+// // Main container - row container
+// .table-row {
+//   display: flex;          display: -webkit-flex;
+//   flex-direction: row;    -webkit-flex-direction: row;
+//   flex-wrap: no-wrap;     -webkit-flex-wrap: no-wrap;
+//   width: 100%;
+//   padding-left: 15px;
+//   padding-right: 15px;
+//   font-size: 12px;
+// }
+
+// // Wrappers around cells and other wrappers
+// .wrapper {
+//   display: flex; display: -webkit-flex;
+//   flex-direction: row; -webkit-flex-direction: row;
+// }
+
+// // leaf level containers (cells): common properties 
+// .column {
+//   flex-grow: 0; -webkit-flex-grow: 0;
+//   flex-shrink: 0; -webkit-flex-shrink: 0;
+//   vertical-align: top;
+// }
+
+// // leaf level containers: widths
+// .index { width: $index-width; }
+// .title { width: $title-width; }
+// .module { width: $module-width; }
+// .reporter { width: $reporter-width; }
+// .status { width: $status-width; }
+// .owner { width: $owner-width; }
+// .severity { width: $severity-width; }
+// .watch, .add-comment { width: $icon-width; }
+// .date { width: $date-width; }
+
+// // leaf level containers (cells): special properties 
+// .index {
+//   text-align: center;
+// }
+
+// .title {
+//   font-weight: bold;
+//   color: #337AB5;
+// }
+
+// .comment {
+//   width: $comment-width;
+// }
+
+// // these are growable text containers, with ellipsis to show truncated text
+// .title, .comment {
+//   flex-grow: 1; -webkit-flex-grow: 1;
+//   overflow: hidden;
+//   white-space: nowrap;
+//   text-overflow: ellipsis;
+//   padding-right: 4px;
+// }
+
+// .date {
+//   width: $date-width;
+//   text-align: right;
+//   padding-right: 4px;
+// }
+
+// /* growable wrappers */
+// .title-comment, .title-comment-module-reporter, .attributes {
+//   flex-grow: 1; -webkit-flex-grow: 1;
+// }
+
+// /*
+//  * Media queries: optimize for different screen widths.
+//  */
+
+// // Wrapper widths
+// $title-comment-width: max($title-width, $comment-width);
+// $module-reporter-width: max($module-width, $reporter-width);
+// $status-owner-width: max($status-width, $owner-width);
+// $title-comment-module-reporter-width: max($title-width, $comment-width,
+//   ($module-width + $reporter-width) );
+// $status-owner-severity-width: max($status-width, $owner-width, 
+//   $severity-width);
+// $all-attributes-width: max($title-width, $comment-width, 
+//   ($module-width + $reporter-width), ($status-width + $owner-width));
+
+
+// @mixin horizontal {
+//     flex-direction: row;        -webkit-flex-direction: row;
+// }
+
+// %horizontal {
+//     @include horizontal;
+// }
+
+// // usage
+// .horizontal {
+//     @extend %horizontal;
+// }
+
+// // .horizontal {
+// //   flex-direction: row;        -webkit-flex-direction: row;
+// // }
+
+// @mixin vertical {
+//   // Let the wrapper flex vertically, so we get 2 rows
+//   flex-direction: column;     -webkit-flex-direction: column;
+//   // can't have the children grow, since this now means vertical growth
+//   div {
+//     flex-grow: 0;  -webkit-flex-grow: 0;
+//   }
+// }
+
+// %vertical {
+//     @include vertical;
+// }
+
+// // usage
+// .vertical {
+//     @extend %vertical;
+// }
+
+// // .vertical {
+// //   // Let the wrapper flex vertically, so we get 2 rows
+// //   flex-direction: column;     -webkit-flex-direction: column;
+// //   // can't have the children grow, since this now means vertical growth
+// //   div {
+// //     flex-grow: 0;  -webkit-flex-grow: 0;
+// //   }
+// // }
+
+// @mixin verticalGrowing {
+//   //@extend vertical;
+//   flex-grow: 0;  -webkit-flex-grow: 0;
+//   > div {
+//     // Let immediate child divs grow horizontally, 100% to fill the wrapper
+//     width: 100%;
+//   }
+// }
+
+// %verticalGrowing {
+//     @include verticalGrowing;
+// }
+
+// // usage
+// .verticalGrowing {
+//     @extend %verticalGrowing;
+// }
+
+// // .vertical-growing {
+// //   @extend vertical;
+// //   > div {
+// //     // Let immediate child divs grow horizontally, 100% to fill the wrapper
+// //     width: 100%;
+// //   }
+// // }
+
+// /*
+//  * Media breaks.
+//  */
+
+// // First break: as many 2-row fields as possible. This will leave Severity
+// // and Dates still horizontal, as they are odd numbered
+// @media all and (max-width: ($margin-width * 2 + $index-width
+//   + $title-width + $comment-width + $module-width + $reporter-width
+//   + $status-width + $owner-width + $severity-width + $icon-width * 2
+//   + $date-width * 3) ) {
+
+//   .title-comment {
+//     @include verticalGrowing;
+//     width: $title-comment-width;
+//   }
+//   .module-reporter, .status-owner {
+//     @include vertical;
+//   }
+// }
+
+// // Next: as many 3-rows as possible
+// @media all and (max-width: ($margin-width * 2 + $index-width
+//   + $title-comment-width + $module-reporter-width
+//   + $status-owner-width  + $severity-width
+//   + $icon-width * 2 + $date-width * 3) ) {
+
+//   // Change module-report back to horizontal, keep it under title and comment
+//   // So, we have 3 rows: title, comment, module-reporter
+//   .module-reporter {
+//      @include horizontal;
+//   }
+//   .title-comment-module-reporter {
+//     @include verticalGrowing;
+//     width: $title-comment-module-reporter-width;
+//   }
+
+//   // Line up status, owner, severity into the next column
+//   .status-owner-severity {
+//     @include vertical;
+//   }
+//   // Line up all icons in one column, even though there's only two of them
+//   .icons {
+//     @include vertical;
+//   }
+//   // Line up all dates in one column
+//   .dates {
+//     @include vertical;
+//   }
+// }
+
+// // Last break: 4 columns: index, attributes, icons, dates
+// @media all and (max-width: ($margin-width * 2 + $index-width
+//   + $title-comment-module-reporter-width + $status-owner-severity-width
+//   + $icon-width + $date-width) ) {
+
+//   // looks better with a little padding on mobile devices
+//   .table-row {
+//     padding-left: 4px;
+//     padding-right: 4px;
+//   }
+
+//   // All attributes: title, comment, module-reporter, status-owner, severity
+//   .attributes {
+//     @include verticalGrowing;
+//     width: $all-attributes-width;
+//   }
+//   .module-reporter, .status-owner {
+//     @include horizontal ;
+//   }
+// }
+
+// /*
+//  * General good-look styles
+//  */
+// .table-row {
+//   border-bottom: 1px solid #e0e0e0;
+//   border-collapse: collapse;
+//   padding-top: 2px;
+// }
+
+// .table-row.header {
+//   background-color: #FFEEDB;
+//   font-weight: bold;
+//   padding-top: 6px;
+//   padding-bottom: 6px;
+// }
+
+// .glyphicon {
+//   color: #DDDDDD;
+// }
+
+// .header .glyphicon {
+//   color: #333
+// }
+
+// .glyphicon-eye-open.active {
+//   color: blue;
+// }
+
+// .glyphicon-comment.active {
+//   color: #3EBB0D;
+// }
+
+// .glyphicon:hover {
+//   color: #666;
+//   cursor: pointer;
+//   text-decoration: underline;
+// }
+
+// .reporter {
+//   color: #999999;
+// }
+// .comment {
+//   font-style: italic;
+// }
+
+// .severity.high { color: red; }
+// .severity.medium { color: blue; }
+// .severity.low { color: green; }
+
+
+
+
+@import '/lib/ngx-datatable/datatable.component.css';
+@import '/lib/ngx-datatable/material.css';
+@import '/lib/ngx-datatable/icons.css';
+
+
+//@import '/node_modules/@swimlane/ngx-datatable/release/themes/material.scss';
+
+
+.card-table md-card-content {
+    padding: 0;
+}
