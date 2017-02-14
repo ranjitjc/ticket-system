@@ -90,7 +90,8 @@ namespace TicketService
 
             Mapper.Initialize(cfg =>
             {
-                //cfg.CreateMap<Domain.TicketStatus, TicketService.QueryStack.TicketStatus.TicketStatusModel>();
+                cfg.CreateMap<Domain.User, TicketService.QueryStack.Account.UserModel>()
+                    .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => String.Concat(src.FirstName , " ", src.LastName)));
                 cfg.CreateMap<Domain.Ticket, TicketService.QueryStack.Ticket.TicketModel>();
                 cfg.CreateMap<Domain.TicketStatus, TicketService.QueryStack.Ticket.TicketModel>();
                 cfg.CreateMap<Domain.TicketPriority, TicketService.QueryStack.Ticket.TicketModel>();

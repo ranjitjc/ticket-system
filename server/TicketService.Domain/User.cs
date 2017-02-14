@@ -17,6 +17,14 @@ namespace TicketService.Domain
         [Column("us_username")]
         public string UserName { get; set; }
 
+        [Required]
+        [Column("us_password")]
+        public string Password { get; set; }
+
+        [Required]
+        [Column("us_salt")]
+        public int? Salt { get; set; }
+
         [Column("us_firstname")]
         public string FirstName { get; set; }
 

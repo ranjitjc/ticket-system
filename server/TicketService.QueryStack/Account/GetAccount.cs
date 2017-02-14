@@ -7,37 +7,20 @@ using System.Linq;
 using System.Threading.Tasks;
 using TicketService.Repository;
 using System.Security.Claims;
+using AutoMapper;
 
-namespace TicketService.QueryStack
+namespace TicketService.QueryStack.Account
 {
     public class GetAccount
     {
-        public class Query : IRequest<UserModel>
+        public class Query : IRequest<Account.UserModel>
         {
             public string loginName { get; set; }
         }
 
-        public class UserModel
-        {
-            public int Id { get; set; }
+       
 
-            public string UserName { get; set; }
-
-            public string FullName { get; set; }
-
-            public string Email { get; set; }
-
-            public int IsAdmin { get; set; }
-
-            public string AccessToken { get; set; }
-
-            public DateTime ExpiresIn { get; set; }
-
-            public string TokenType { get; set; }
-
-        }
-
-        public class QueryHandler : IAsyncRequestHandler<Query, UserModel>
+        public class QueryHandler : IAsyncRequestHandler<Query, Account.UserModel>
         {
             private readonly IDatabaseService _context;
             private ILogger<QueryHandler> _logger;
@@ -49,39 +32,45 @@ namespace TicketService.QueryStack
             }
 
 
-
-            public async Task<UserModel> Handle(Query message)
+            public async Task<Account.UserModel> Handle(Query message)
             {
 
-                var query = _context.Users.Where(a => a.UserName.ToLower() == message.loginName.ToLower())
-                        .Select(userInDatabase => new UserModel
-                        {
-                            UserName = userInDatabase.UserName,
-                            FullName = userInDatabase.FirstName + ' ' + userInDatabase.LastName,
-                            IsAdmin = userInDatabase.IsAdmin,
-                            Email = userInDatabase.Email
-                        });
-
-
-
+                var query = _context.Users.Where(a => a.UserName.ToLower() == message.loginName.ToLower());
+                        
                 var sql = query.ToSql();
                 _logger.LogInformation("AccountController:GetAccount:Query => " + sql);
 
 
-                UserModel user = await query.SingleOrDefaultAsync();
+                var user = await query.SingleOrDefaultAsync();
 
-
-                //ClaimsIdentity identity = new ClaimsIdentity(message.loginName.ToLower());
-                //ClaimsPrincipal principal = new ClaimsPrincipal(identity);
-
-
-
-                return user;
-                
-               
-
+                return Mapper.Map(user, new UserModel());
 
             }
+
+            //public async Task<Account.UserModel> Handle(Query message)
+            //{
+
+            //    var query = _context.Users.Where(a => a.UserName.ToLower() == message.loginName.ToLower())
+            //            .Select(userInDatabase => new Account.UserModel
+            //            {
+            //                UserName = userInDatabase.UserName,
+            //                FullName = userInDatabase.FirstName + ' ' + userInDatabase.LastName,
+            //                IsAdmin = userInDatabase.IsAdmin,
+            //                Email = userInDatabase.Email
+            //            });
+
+
+
+            //    var sql = query.ToSql();
+            //    _logger.LogInformation("AccountController:GetAccount:Query => " + sql);
+
+
+            //    Account.UserModel user = await query.SingleOrDefaultAsync();
+
+
+            //    return user;
+
+            //}
         }
     }
 }

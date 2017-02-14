@@ -13,6 +13,7 @@ using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.Extensions.Configuration;
+using TicketService.QueryStack.Account;
 
 namespace TicketService.Controllers
 {
@@ -61,40 +62,12 @@ namespace TicketService.Controllers
             try
             {
                 string logOnName = WindowsIdentity.GetCurrent().Name.Replace("OCD\\", "");
-                QueryStack.GetAccount.Query query = new QueryStack.GetAccount.Query { loginName = logOnName };
+                GetAccount.Query query = new GetAccount.Query { loginName = logOnName };
 
 
-                QueryStack.GetAccount.UserModel authUser = await _mediator.Send(query);
+                UserModel authUser = await _mediator.Send(query);
 
-                //_hasher.VerifyHashedPassword(user, user.PasswordHash, model.Password)
-
-                var claims = new[]
-                {
-                    new Claim(JwtRegisteredClaimNames.Sub, authUser.UserName),
-                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                    new Claim(JwtRegisteredClaimNames.GivenName, authUser.FullName),
-                    new Claim(JwtRegisteredClaimNames.Email, authUser.UserName),
-                    new Claim( "IsAdmin", authUser.IsAdmin ==1 ? "true": "false")
-
-                };
-
-                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Tokens:Key"]));
-                var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-
-                var token = new JwtSecurityToken(
-                    issuer: _config["Tokens:Issuer"],
-                    audience: _config["Tokens:Audience"],
-                    claims:claims,
-                    expires: DateTime.UtcNow.AddMinutes(15),
-                    signingCredentials : credentials
-                    );
-
-                authUser.TokenType = "Jwt";
-                authUser.AccessToken = new JwtSecurityTokenHandler().WriteToken(token);
-                authUser.ExpiresIn = token.ValidTo;
-
-                return Ok(authUser);
+                return Ok(GetCliams(authUser));
 
             }
             catch(Exception ex)
@@ -103,6 +76,60 @@ namespace TicketService.Controllers
             }
 
             return BadRequest("Failed to generage token");
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> AuthenticateByUser([FromBody] GetAccountByUser.Query query)
+        {
+
+            try
+            {
+                 UserModel authUser = await _mediator.Send(query);
+
+                //_hasher.VerifyHashedPassword(user, user.PasswordHash, model.Password)
+
+                return Ok(GetCliams(authUser));
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception theown while creating JWT : {ex}");
+            }
+
+            return BadRequest("Failed to generage token");
+        }
+
+
+        private UserModel GetCliams(UserModel authUser)
+        {
+            var claims = new[]
+               {
+                    new Claim(JwtRegisteredClaimNames.Sub, authUser.UserName),
+                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                    new Claim(JwtRegisteredClaimNames.GivenName, authUser.FullName),
+                    new Claim(JwtRegisteredClaimNames.Email, authUser.UserName),
+                    new Claim( "IsAdmin", authUser.IsAdmin ==1 ? "true": "false")
+
+                };
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Tokens:Key"]));
+            var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+
+            var token = new JwtSecurityToken(
+                issuer: _config["Tokens:Issuer"],
+                audience: _config["Tokens:Audience"],
+                claims: claims,
+                expires: DateTime.UtcNow.AddMinutes(15),
+                signingCredentials: credentials
+                );
+
+            authUser.TokenType = "Jwt";
+            authUser.AccessToken = new JwtSecurityTokenHandler().WriteToken(token);
+            authUser.ExpiresIn = token.ValidTo;
+
+            return authUser;
         }
 
     }
