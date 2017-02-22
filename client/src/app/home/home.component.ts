@@ -56,6 +56,7 @@ export class HomeComponent implements OnInit {
       let subscription =
         this._authService.LoggedInUser.subscribe(
           (currentUser) => {
+            this.isError = false;
             //console.log('HomeComponent:ngOnInit.Next :' + JSON.stringify(currentUser) );
             if (!_.isEmpty(currentUser)) {
               this.loadData()
@@ -71,8 +72,13 @@ export class HomeComponent implements OnInit {
               subscription.unsubscribe();
             }
           },
-          (err) =>
-            console.log('HomeComponent:ngOnInit.Error :' + err),
+          (err) => {
+            console.log('HomeComponent:ngOnInit.Error :' + err)
+            this.isError = true;
+            this.message = {messageType : 3,
+                        messageIcon:"error",
+                        messageText : err};
+          },
           () => {
             //console.log('HomeComponent:ngOnInit.Completed')
           }
@@ -80,9 +86,9 @@ export class HomeComponent implements OnInit {
     }
 
     //testing messageCard
-    this.message = {messageType : MessageType.ERROR,
+    this.message = {messageType : 3,
                         messageIcon:"error",
-                        messageText : 'Testing ...'};
+                        messageText : 'Tesing...'};
 
   }
 
@@ -103,10 +109,10 @@ export class HomeComponent implements OnInit {
         this.isReportedTicketsLoading = false;
       },
        (error:any) => {
+            this.isError = true;
             this.message = {messageType : MessageType.ERROR,
                         messageIcon:"error",
                         messageText : <any>error};
-            this.isError=true;
           }
     )
   }
@@ -119,7 +125,12 @@ export class HomeComponent implements OnInit {
         console.table(data);
         this.isAssignedTicketsLoading = false;
       },
-      (error: any) => this.errorMessage = <any>error
+      (error: any) => {
+         this.isError = true;
+          this.message = {messageType : MessageType.ERROR,
+                      messageIcon:"error",
+                      messageText : <any>error};
+      }
     )
   }
 
@@ -131,7 +142,12 @@ export class HomeComponent implements OnInit {
         this.reportedChartData = data ;//data.map( a=>  { return  [a.statusName , a.count] });
         this.isAssignedTicketsLoading = false;
       },
-      (error: any) => this.errorMessage = <any>error
+      (error: any) => {
+         this.isError = true;
+          this.message = {messageType : MessageType.ERROR,
+                      messageIcon:"error",
+                      messageText : <any>error};
+      }
     )
   }
 
@@ -143,7 +159,12 @@ export class HomeComponent implements OnInit {
         this.assignedChartData = data ;//data.map( a=>  { return  [a.statusName , a.count] });
         this.isAssignedTicketsLoading = false;
       },
-      (error: any) => this.errorMessage = <any>error
+      (error: any) => {
+         this.isError = true;
+          this.message = {messageType : MessageType.ERROR,
+                      messageIcon:"error",
+                      messageText : <any>error};
+      }
     )
   }
 

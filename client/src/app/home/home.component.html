@@ -2,8 +2,9 @@
 
   <div *ngIf="!isError">
 
-    <md-grid-list cols="2" ratio="4:1" gutterSize="5px">
-      <md-grid-tile cols="1" row="1">
+    <div>
+
+      <div fxLayout="row" fxLayout.xs="column" fxLayout.sm="column" fxLayoutAlign="space-around center">
         <md-card class="app-card card-basic status-card">
           <md-toolbar color="primary">Reported Tickets</md-toolbar>
           <md-card-content>
@@ -13,8 +14,7 @@
             <md-progress-bar mode="indeterminate" *ngIf="!reportedChartData"></md-progress-bar>
           </md-card-footer>
         </md-card>
-      </md-grid-tile>
-      <md-grid-tile cols="2" row="1">
+
         <md-card class="app-card card-basic status-card">
           <md-toolbar color="primary">Assigned Tickets</md-toolbar>
           <md-card-content>
@@ -24,10 +24,9 @@
             <md-progress-bar mode="indeterminate" *ngIf="!assignedChartData"></md-progress-bar>
           </md-card-footer>
         </md-card>
-      </md-grid-tile>
+      </div>
 
-      <md-grid-tile cols="1" row="2">
-
+      <div fxLayout="row" fxLayout.xs="column" fxLayout.sm="column" fxLayoutAlign="space-around center">
         <md-card class="app-card card-basic status-card">
           <md-toolbar color="primary">Recent Reported Tickets
 
@@ -54,8 +53,7 @@
             <md-progress-bar mode="indeterminate" *ngIf="!reportedTickets"></md-progress-bar>
           </md-card-footer>
         </md-card>
-      </md-grid-tile>
-      <md-grid-tile cols="2" row="2">
+
         <md-card class="app-card card-basic status-card">
           <md-toolbar color="primary">Recent Assigned Tickets
             <span class="app-toolbar-filler"></span>
@@ -79,8 +77,9 @@
             <md-progress-bar mode="indeterminate" *ngIf="!assignedTickets"></md-progress-bar>
           </md-card-footer>
         </md-card>
-      </md-grid-tile>
-    </md-grid-list>
+      </div>
+
+    </div>
   </div>
 </div>
 
@@ -102,4 +101,4 @@
 </md-card>
 <div style="display: none"> {{LoggedInState | async}} {{LoggedInErrorState | async}}
 </div>
-<message-card [data]="message" *ngIf="!isError" ></message-card>
+<message-card [data]="message" *ngIf="isError" ></message-card>

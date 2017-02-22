@@ -5,7 +5,7 @@ import { AuthGuard} from './security/auth.guard';
 import { AuthenticationService } from './services/auth.service';
 
 import { HomeComponent } from './home/home.component';
-//import { LoginComponent } from './login/login.component';
+import { LoginComponent } from './login/login.component';
 import { AboutComponent } from './about/about.component';
 import { MaterialComponent } from './material/material.component';
 import { StatusComponent } from './status/status.component';
@@ -15,10 +15,10 @@ import { SearchComponent } from './search/search.component';
 
 
 const routes: Routes = [
-  { path: '', component: HomeComponent},
-  //{ path: '', component: HomeComponent , canActivate: [AuthGuard]},
-  //{ path: 'login', component: LoginComponent},
-  { path: 'tickets', component: TicketComponent },
+  //{ path: '', component: HomeComponent},
+  { path: '', component: HomeComponent , canActivate: [AuthGuard]},
+  { path: 'login', component: LoginComponent},
+  { path: 'tickets', component: TicketComponent, canActivate: [AuthGuard]},
   { path: 'search', component: SearchComponent },
   { path: 'status', component: StatusComponent },
   { path: 'category', component: CategoryComponent },

@@ -1,89 +1,66 @@
 <md-sidenav-layout [class.m2app-dark]="isDarkTheme" fullscreen>
 
   <md-sidenav #sidenav mode="side" class="app-sidenav" [opened]="true">
-     <!--<md-button ng-click="toggleLeft()" class="md-accent">
-          Close this Sidenav
-        </md-button>-->
-    <!--<md-nav-list>
-      <a md-list-item>
-        <md-icon md-list-icon>home</md-icon>
-        <span md-line>Home</span>
-        <span md-line class="desc">Dashboard</span>
-      </a>
-      <a md-list-item>
-        <md-icon md-list-icon>event_note</md-icon>
-        <span md-line>New</span>
-        <span md-line class="desc">New Ticket</span>
-      </a>
-    </md-nav-list>-->
     <md-nav-list>
-      
-      <a *ngFor="let navItem of navItems"
-         md-list-item
-         
-         [routerLink]="[navItem.route]">
+      <a *ngFor="let navItem of navItems" md-list-item [routerLink]="[navItem.route]">
         <md-icon md-list-icon>{{navItem.icon}}</md-icon>
         <span md-line>{{navItem.name}}</span>
         <span md-line class="desc">{{navItem.desc}}</span>
-        
       </a>
     </md-nav-list>
   </md-sidenav>
-<!--(click)="sidenav.toggle()"-->
-
   <md-toolbar color="primary">
+
     <button class="app-icon-button" (click)="sidenav.toggle()">
       <i class="material-icons app-toolbar-menu">menu</i>
-    </button> Ticket System&nbsp;
-
-    <!--<button md-button [routerLink]="['/']">Home</button>-->
-    <!--<button md-button [routerLink]="['/ticket']">Ticket</button>
-    <button md-button [routerLink]="['/search']">Search</button>
-    <button md-button [routerLink]="['/admin']">Admin</button>
-    <button md-button [routerLink]="['/about', 'Hello, world!']">About</button>-->
+    </button>
+    <span>
+      Ticket System&nbsp;
+    </span>
 
     <span class="app-toolbar-filler"></span>
-
-    <form> 
+    <div fxLayout="row" fxShow="false" fxShow.gt-sm fxLayoutAlign="end center">
+      <form>
         <div class="search">
-        <md-input-container>
-          <input md-input placeholder="Search"  maxlength="6">
-        </md-input-container>
+          <md-input-container>
+            <input md-input placeholder="Search" maxlength="6">
+          </md-input-container>
         </div>
-    </form>
-    <!--<button md-button *ngIf="loggedIn()" [routerLink]="['/profile']">Profile</button>
-    <button md-button *ngIf="!loggedIn()" (click)="login()">Sign in</button>
-    <button md-button *ngIf="loggedIn()" (click)="logout()">Sign out</button>-->
-    <span md-icon [class.m2app-dark]="isDarkTheme">
-      <span md-line>{{ fullName | async}}</span>
-    </span>
-    <!--<span md-icon [class.m2app-dark]="isDarkTheme">
+      </form>
+      <!--<button md-button *ngIf="loggedIn()" [routerLink]="['/profile']">Profile</button>
+      <button md-button *ngIf="!loggedIn()" (click)="login()">Sign in</button>
+      <button md-button *ngIf="loggedIn()" (click)="logout()">Sign out</button>-->
+      <span md-icon [class.m2app-dark]="isDarkTheme">
+        <span md-line>{{ fullName | async}}</span>
+      </span>
+      <!--<span md-icon [class.m2app-dark]="isDarkTheme">
       <md-icon>notifications</md-icon>
-    </span>-->
-    <!--<button md-mini-fab (click)="isDarkTheme = !isDarkTheme">
+      </span>-->
+      <!--<button md-mini-fab (click)="isDarkTheme = !isDarkTheme">
       <md-icon class="md-12">settings_applications</md-icon>
-      <!--<i class="material-icons">settings_applications</i>-->
+      <!- -<i class="material-icons">settings_applications</i>-->
       <!--</button>-->
 
-       <button md-icon-button [class.m2app-dark]="isDarkTheme"
-            (click)="openNotification()">
+      
+    </div>
+    <div>
+      <button md-icon-button [class.m2app-dark]="isDarkTheme" (click)="openNotification()">
          <md-icon class="md-12">{{notificationIcon}}</md-icon>
       </button>
       <button md-icon-button [md-menu-trigger-for]="menu">
          <md-icon class="md-12">settings_applications</md-icon>
       </button>
-
+    </div>
     <md-menu #menu="mdMenu">
       <button md-menu-item (click)="isDarkTheme = !isDarkTheme">
         <md-icon>dashboard</md-icon>
         <span>Dark Theme</span>
         </button>
-       <button md-menu-item>
+      <button md-menu-item>
         <md-icon>dialpad</md-icon>
         <span>Settings</span>
       </button>
-      <md-slide-toggle
-          class="example-margin">
+      <md-slide-toggle class="example-margin">
         Notification
       </md-slide-toggle>
     </md-menu>

@@ -2,6 +2,7 @@ import { Component, OnInit, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common'
 import { RouterModule} from '@angular/router';
 import { MaterialModule } from '@angular/material';
+import { FlexLayoutModule } from '@angular/flex-layout'
 
 import { AuthenticationService, TicketService } from '../services/services.module';
 
@@ -17,12 +18,13 @@ import { TicketComponent } from '../ticket/ticket.component';
 
 @NgModule({
   imports: [
-    SharedModule,
     CommonModule,
     MaterialModule.forRoot(),
+    FlexLayoutModule,
     RouterModule.forChild([
       { path: 'ticket', component: TicketComponent },
     ]),
+    SharedModule,
     MessageModule
   ],
   declarations: [
