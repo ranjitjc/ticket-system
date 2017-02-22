@@ -1,4 +1,6 @@
 {
+  "userSecretsId": "ticket-service-c23d27a4-eb88-4b18-9b77-2a93f3b15119",
+
   "dependencies": {
     "Microsoft.NETCore.App": {
       "version": "1.1.0",
@@ -35,11 +37,15 @@
     "TicketService.Common": "1.0.0-*",
     "Swashbuckle": "6.0.0-beta902",
     "Microsoft.AspNetCore.Authentication.JwtBearer": "1.1.0",
-    "TicketService.Repository.SqlServer": "1.0.0-*"
+    "TicketService.Repository.SqlServer": "1.0.0-*",
+    "Microsoft.Extensions.Configuration.UserSecrets": "1.1.0"
   },
 
   "tools": {
-    "Microsoft.AspNetCore.Server.IISIntegration.Tools": "1.1.0-preview4-final"
+    "Microsoft.AspNetCore.Server.IISIntegration.Tools": "1.1.0-preview4-final",
+    "Microsoft.Extensions.SecretManager.Tools": {
+      "version": "1.0.0-preview2-final"
+    }
   },
 
   "frameworks": {
