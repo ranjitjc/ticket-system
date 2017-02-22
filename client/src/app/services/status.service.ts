@@ -97,6 +97,16 @@ export class StatusService {
         } catch (e) {
         }
 
+        let errMessage:string;
+
+        if (error instanceof Response){
+            let body = error.json() || '';
+            let error1 = body.error || JSON.stringify(body);
+            errMessage = `${error.status} - ${error.statusText} || '' ${error1}`; 
+        }else{
+            errMessage = error.message ? error.message : error.toString();
+        }
+
         let errMsg = error.errorMessage
             ? error.errorMessage
             : error.message
@@ -108,6 +118,6 @@ export class StatusService {
                         : 'unknown server error';
 
         console.error(errMsg);
-        return Observable.throw(errMsg);
+        return Observable.throw(errMessage ? errMessage : errMsg);
     }
 }
