@@ -1,7 +1,11 @@
 
-
+export interface login{
+    userName:string, 
+    password:string
+} 
 
 export interface CurrentUser {
+    id:number,
     userName: string;
     fullName: string;
     isAdmin: boolean;

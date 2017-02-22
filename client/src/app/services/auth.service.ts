@@ -26,31 +26,30 @@ export class AuthenticationService {
     LoggedInUser: Observable<CurrentUser>;
     _loggedInUser: BehaviorSubject<CurrentUser>
 
-    loginWin(event, username, password) {
-        event.preventDefault();
+    // loginWin(event, username, password) {
+    //     event.preventDefault();
 
-        let url = environment.apiURL + "login";
+    //     let url = environment.apiURL + "login";
 
-        let body = "username=" + username + "&password=" + password + "&grant_type=password";
-        let headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
-        let options = new RequestOptions({ headers: headers });
+    //     let body = "username=" + username + "&password=" + password + "&grant_type=password";
+    //     let headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
+    //     let options = new RequestOptions({ headers: headers });
 
-        this._http.post(url, body, options).subscribe(
-            response => {
-                localStorage.setItem('access_token', response.json().access_token);
-                localStorage.setItem('expires_in', response.json().expires_in);
-                localStorage.setItem('token_type', response.json().token_type);
-                localStorage.setItem('userName', response.json().userName);
-                //this._router.navigate(['Dashboard']);
-            },
-            error => {
-                alert(error.text());
-                console.log(error.text());
-            }
-        );
-    }
+    //     this._http.post(url, body, options).subscribe(
+    //         response => {
+    //             localStorage.setItem('access_token', response.json().access_token);
+    //             localStorage.setItem('expires_in', response.json().expires_in);
+    //             localStorage.setItem('token_type', response.json().token_type);
+    //             localStorage.setItem('userName', response.json().userName);
+    //             //this._router.navigate(['Dashboard']);
+    //         },
+    //         error => {
+    //             alert(error.text());
+    //             console.log(error.text());
+    //         }
+    //     );
+    // }
 
-    //login(username: string, password: string): Promise<CurrentUser> {
     login(): Observable<CurrentUser> {
 
         // return false to indicate failed login
@@ -62,27 +61,29 @@ export class AuthenticationService {
         let options = new RequestOptions({ headers: headers });       
         return this._http.post(url, body, options) 
         */
+        let authService = this;
         return this._http.get(this.baseUrl)
             //.toPromise()
-            .map(response => this.extractArray(response))
+            .map(response => this.extractUser(response))
+            .catch(err=> this.handleError(err, authService));
+    }
+
+    loginForms(username: string, password: string): Observable<CurrentUser> {
+
+        localStorage.removeItem('currentUser');
+
+        //let body = "username=" + username + "&password=" + password ;
+        let body = JSON.stringify({ userName: username, password: password });
+        //let headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        let options = new RequestOptions({ headers: headers });
+
+        return this._http.post(this.baseUrl, body, options).delay(3000)
+            .map(response => this.extractUser(response))
             .catch(this.handleError);
     }
 
-    loginFormAuth(username: string, password: string): Promise<CurrentUser> {
-
-        let url = environment.apiURL + "/security";
-
-        let body = "username=" + username + "&password=" + password + "&grant_type=password";
-        body = JSON.stringify({ username: username, password: password });
-        let headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
-        let options = new RequestOptions({ headers: headers });
-        return this._http.post(url, body, options)
-            .toPromise()
-            .then(response => this.extractArray(response))
-            .catch(this.handleErrorPromise);
-    }
-
-    protected extractArray(res: Response, showprogress: boolean = true) {
+    protected extractUser(res: Response, showprogress: boolean = true) {
         let user: CurrentUser = res.json() || {};
         // login successful if there's a jwt token in the response
         let token = user && user.accessToken;
@@ -116,11 +117,21 @@ export class AuthenticationService {
     }
 
 
-    protected handleError(error: any) {
+    protected handleError(error: any, service:any) {
         try {
             error = JSON.parse(error._body);
         } catch (e) {
         }
+
+        let errMessage:string;
+
+        // if (error instanceof Response){
+        //     let body = error.json() || '';
+        //     let error1 = body.error || JSON.stringify(body);
+        //     errMessage = `${error.status} - ${error.statusText} || '' ${error1}`; 
+        // }else{
+        //     errMessage = error.message ? error.message : error.toString();
+        // }
 
         let errMsg = error.errorMessage
             ? error.errorMessage
@@ -133,8 +144,11 @@ export class AuthenticationService {
                         : 'unknown server error';
 
         console.error(errMsg);
-        return Observable.throw(errMsg);
+        service._loggedInUser.error( new Error(errMessage ? errMessage : errMsg));
+        return Observable.throw(errMessage ? errMessage : errMsg);
     }
+
+
     protected handleErrorPromise(error: any): Promise<void> {
         try {
             error = JSON.parse(error._body);
@@ -159,5 +173,9 @@ export class AuthenticationService {
         // clear token remove user from local storage to log user out
         //this.token = null;
         localStorage.removeItem('currentUser');
+
+        //delete localStorage.currentUser;
+
+        localStorage.clear;
     }
 }

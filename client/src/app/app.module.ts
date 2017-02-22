@@ -19,7 +19,7 @@ import { AppRoutingModule } from './app.routing.module'
 import { HomeModule } from './home/home.module';
 import { AboutComponent } from './about/about.component';
 import { MaterialComponent } from './material/material.component';
-import { LoginComponent } from './login/login.component';
+import { LoginModule } from './login/login.module';
 import { StatusModule  } from './status/status.module';
 import { CategoryModule } from './category/category.module';
 import { TicketModule } from './ticket/ticket.module';
@@ -38,7 +38,7 @@ import { BarchartComponent } from './shared/barchart/barchart.component';
     //HomeComponent, 
     AboutComponent, 
     MaterialComponent, 
-    LoginComponent, 
+    //LoginComponent, 
     //CategoryComponent,  
     SearchComponent, 
     //BarchartComponent
@@ -52,6 +52,7 @@ import { BarchartComponent } from './shared/barchart/barchart.component';
     ServicesModule.forRoot(),
     AppRoutingModule,
     //MessageModule,
+    LoginModule,
     HomeModule,
     StatusModule,
     CategoryModule,
@@ -68,7 +69,10 @@ export class AppModule {
   constructor(
       private _authenticationService: AuthenticationService,
       private _chatService: ChatService) {
-        this._authenticationService.login().subscribe();
+        this._authenticationService.logout();
+        //this._authenticationService.login().subscribe();
+        
+        
         this._chatService.start(true).subscribe(
             null,
             error => console.log('AppModule:init:_chatService:Start(): ' + error));

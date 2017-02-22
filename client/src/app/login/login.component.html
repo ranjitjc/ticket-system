@@ -1,14 +1,26 @@
-<md-card class="demo-card demo-basic">
-  <md-toolbar color="primary">Login</md-toolbar>
-  <md-card-content>
-      <form role="form" (submit)="login($event, username.value, password.value)">
-          <md-input class="demo-full-width" #username id="username" placeholder="Username"  required="required"></md-input> <br/>
-          <md-input class="demo-full-width" type="password" #password id="password" placeholder="Password"  required="required"></md-input><br/>
-          <button md-raised-button color="primary" type="submit" [disabled]="loading" >Login</button> 
-          <img *ngIf="loading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
-      </form>    
-  </md-card-content>
-  <md-card-footer>
-    <div *ngIf="error" class="alert alert-danger">{{error}}</div>
-  </md-card-footer>
-</md-card>
+<div fxLayout="row" fxLayoutAlign="space-around center">
+    <md-card class="app-card card-basic card-login">
+        <md-toolbar color="primary">Login</md-toolbar>
+        <md-card-content>
+            <form [formGroup]="loginForm" novalidate>
+                <md-input class="demo-full-width" formControlName="userName" placeholder="Username" dividerColor="{{ !loginForm.get('userName').valid ? 'warn' : 'primary' }}">
+
+                    <md-hint *ngIf="displayMessage.userName" [ngStyle]="{'color': 'red'}" align="start">{{displayMessage.userName}}</md-hint>
+                </md-input> <br/>
+                <md-input class="demo-full-width" type="password" formControlName="password" id="password" placeholder="Password" dividerColor="{{ !loginForm.get('password').valid ? 'warn' : 'primary' }}">
+                    <md-hint *ngIf="displayMessage.password" [ngStyle]="{'color': 'red'}" align="start">{{displayMessage.password}}</md-hint>
+                </md-input><br/>
+                <div id="login" fxLayoutAlign="end">
+                    <button md-raised-button color="primary" (click)="login()" [disabled]='!loginForm.valid || isProcessing'>Login</button>
+                </div>
+            </form>
+            <div *ngIf="error" class="alert alert-danger">{{error}}</div>
+        </md-card-content>
+        <md-card-footer>
+            <md-progress-bar mode="indeterminate" *ngIf="isProcessing"></md-progress-bar>
+        </md-card-footer>
+    </md-card>
+</div>
+<div fxLayout="row" fxLayoutAlign="center center">
+    <message-card [data]="message" *ngIf="isError"></message-card>
+</div>
