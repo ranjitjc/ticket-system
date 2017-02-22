@@ -13,6 +13,7 @@ import { CurrentUser, Ticket, MessageModel, MessageType, TicketStatus } from '..
 //shared
 import { NumberValidators, GenericValidator, ConfirmationService, NotificationService } from '../../shared/shared.module';
 
+declare var _: any;
 
 @Component({
   selector: 'ticket-detail',
@@ -23,10 +24,12 @@ export class TicketDetailComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @ViewChildren(FormControlName, { read: ElementRef }) formInputElements: ElementRef[];
 
+  private currentUser: CurrentUser = JSON.parse(localStorage.getItem('currentUser'));
   isLoading: boolean = false;
   isSaving: boolean = false;
   isError: Boolean = false;
   ticket: Ticket;
+  ticketId:number;
   statuses: TicketStatus[];
   projects: any[];
   categories: any[];
@@ -85,9 +88,9 @@ export class TicketDetailComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.sub = this.route.params.subscribe(
       params => {
-        let id = params['id'];
-        console.log('id :' + id);
-        this.getTicket(id);
+        this.ticketId = params['id'];
+        console.log('ticketId :' + this.ticketId);
+        this.loadTicket();
       });
 
     // this.ticketForm = this.fb.group({
@@ -99,16 +102,40 @@ export class TicketDetailComponent implements OnInit, AfterViewInit, OnDestroy {
     //       priorityId:[''],
     //     });
 
-    
   }
 
-  getTicket(id) {
+loadTicket(){
+   if (!_.isEmpty(this.currentUser)) {
+       this.getTicket();
+   }else{
+      let subscription =
+        this._authService.LoggedInUser.subscribe(
+          (currentUser) => {
+            //console.log('HomeComponent:ngOnInit.Next :' + JSON.stringify(currentUser) );
+            if (!_.isEmpty(currentUser)) {
+              this.getTicket();
+            } else {
+              //Unauthorized
 
-    // if (id==0){
-    //   this.newTicket();
-    // }else{
-    //this.ticket = null;
-    this._ticketService.GetTicket(id).subscribe(
+            }
+            if (subscription) {
+              //console.log('HomeComponent:ngOnInit.unsubscribe.'),
+              subscription.unsubscribe();
+            }
+          },
+          (err) =>
+            console.log('TicketDetailComponent:ngOnInit.loadTicket() :' + err),
+          () => {
+            //console.log('HomeComponent:ngOnInit.Completed')
+          }
+        );
+   }
+}
+
+
+  getTicket() {
+   
+    this._ticketService.GetTicket(this.ticketId).subscribe(
       data => {
         let response: any = data;
         console.log(response);
@@ -125,7 +152,7 @@ export class TicketDetailComponent implements OnInit, AfterViewInit, OnDestroy {
         this.isError = true;
       }
     )
-    // }
+    
 
   }
 

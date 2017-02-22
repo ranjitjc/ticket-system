@@ -7,7 +7,7 @@ import { FlexLayoutModule } from '@angular/flex-layout'
 
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
-//import { PolymerElement } from '@vaadin/angular2-polymer';
+import { AuthGuard} from '../security/auth.guard';
 
 import { TicketService } from '../services/services.module';
 
@@ -38,11 +38,11 @@ import { TicketDetailComponent } from './detail/ticket.detail.component';
     //InMemoryWebApiModule.forRoot(ProductData),
     NgxDatatableModule,
     RouterModule.forChild([
-      { path: 'ticket', component: TicketComponent },
+      { path: 'ticket', component: TicketComponent, canActivate: [AuthGuard] },
       { path: 'ticket/:id',
         //canActivate: [ StatusGuard],
         //canDeactivate: [ StatusEditGuard ],
-        component: TicketDetailComponent
+        component: TicketDetailComponent, canActivate: [AuthGuard]
       },
     ])
   ],

@@ -8,7 +8,7 @@ import { CurrentUser, Ticket, MessageModel, MessageType } from '../model/models'
 //third party contrils
 //import { PolymerElement } from '@vaadin/angular2-polymer';
 
-import { tableDatas } from './pagination-datas';
+//import { tableDatas } from './pagination-datas';
 
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 

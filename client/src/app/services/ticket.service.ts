@@ -27,7 +27,7 @@ export class TicketService {
         if (this.currentUser) {
             let headers = new Headers({ 'Authorization': 'Bearer ' + this.currentUser.accessToken });
             let params = new URLSearchParams();
-            params.set('ReportedUser', '52');
+            params.set('ReportedUser', this.currentUser.id.toString());
             this.options = new RequestOptions({ headers: headers, search: params });
 
             const url = `${this.baseUrl}/ReportedTickets`;
@@ -48,7 +48,7 @@ export class TicketService {
 
             const url = `${this.baseUrl}/AssignedTickets`;
             let params = new URLSearchParams();
-            params.set('AssignedUser', '52');
+            params.set('AssignedUser', this.currentUser.id.toString());
 
             this.options.search = params;
 

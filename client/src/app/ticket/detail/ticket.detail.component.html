@@ -128,21 +128,17 @@
     </div>
     <div fxFlex>
       <md-toolbar class="toolbar-comment" color="primary">Comments</md-toolbar>
-      <md-card class="app-card card-basic" *ngFor="let post of ticket.posts">
-        <md-card-content>
-          <div class="containerX">
-            <div fxLayout="column" class="coloredContainerX box">
-              <div fxFlex>
-                <div fxLayout="row" fxLayoutAlign="space-between stretch">
-                  <span>{{post.userName}}</span>
-                  <span>{{post.postDate}}</span>
-                </div>
-              </div>
-              <div fxFlex class="comment">
-                <span>{{post.comment}}</span>
-              </div>
+      <md-card class="app-card card-basic card-comment" *ngFor="let post of ticket.posts">
+        <md-card-content class="content-comment">
+            <div fxLayout="column" fxLayoutAlign="start stretch" > 
+              <md-card-subtitle fxFlex color="accent" class="toolbar-comment-header">
+                  <div fxLayout="row" fxLayoutAlign="space-between stretch">
+                    <span class="username">{{post.userName}}</span>
+                    <span class="date">{{post.postDate}}</span>
+                  </div>
+              </md-card-subtitle>
+              <span>{{post.comment}}</span>
             </div>
-          </div>
         </md-card-content>
       </md-card>
     </div>
