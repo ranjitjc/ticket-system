@@ -1,5 +1,7 @@
 //import { NotificationService } from './notification.service';
 import { MaterialModule } from '@angular/material';
+import { FlexLayoutModule } from '@angular/flex-layout'
+
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -11,6 +13,7 @@ import { MessageCard}   from './message-card';
     imports: [
         CommonModule,
         MaterialModule.forRoot(),
+        FlexLayoutModule
     ],
     exports: [
         MessageCard,

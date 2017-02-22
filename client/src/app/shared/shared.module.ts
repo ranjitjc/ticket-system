@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from '@angular/material';
-
+import { FlexLayoutModule } from '@angular/flex-layout'
 //component
 //import { ConfirmationDialog }   from './confirmation/confirmation.dialog';
 import { BarchartComponent } from './barchart/barchart.component'
@@ -31,6 +31,7 @@ import { NumberValidators } from './validators/number.validator';
   imports: [
     CommonModule,
     MaterialModule.forRoot(),
+    FlexLayoutModule,
     MessageModule,
     ConfirmationModule,
     NotificationModule
